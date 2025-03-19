@@ -38,14 +38,14 @@ const formSchema = z.object({
   }),
   notes: z.string().optional()
 }).refine((data) => {
-  // If matchType is competitive, result field should not be required
-  if (data.matchType === "competitive") {
+  // If matchType is training, result field should not be required
+  if (data.matchType === "training") {
     return true;
   }
-  // If matchType is training, result field is required
+  // If matchType is competitive, result field is required
   return !!data.result;
 }, {
-  message: "Result is required for training matches",
+  message: "Result is required for competitive matches",
   path: ["result"]
 });
 
@@ -69,7 +69,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       matchType: "training",
       matchFormat: "2v2",
       players: "",
-      result: "win",
+      result: undefined,
       duration: "",
       venue: "",
       notes: ""
@@ -79,12 +79,12 @@ const MatchForm: React.FC<MatchFormProps> = ({
   // Get the current value of matchType
   const watchMatchType = form.watch("matchType");
   
-  // Reset result field when matchType changes to competitive
+  // Reset result field when matchType changes to training
   useEffect(() => {
-    if (watchMatchType === "competitive") {
+    if (watchMatchType === "training") {
       form.setValue("result", undefined);
     } else if (!form.getValues("result")) {
-      // Set default result for training if not set
+      // Set default result for competitive if not set
       form.setValue("result", "win");
     }
   }, [watchMatchType, form]);
@@ -99,7 +99,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       // Show success toast
       toast({
         title: "Match recorded!",
-        description: `Your ${data.matchType === "competitive" ? "competitive match" : data.result} at ${data.venue} has been saved.`
+        description: `Your ${data.matchType === "training" ? "training session" : data.result} at ${data.venue} has been saved.`
       });
 
       // Call the callback if provided
@@ -113,7 +113,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
         matchType: "training",
         matchFormat: "2v2",
         players: "",
-        result: "win",
+        result: undefined,
         duration: "",
         venue: "",
         notes: ""
@@ -199,8 +199,8 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Result Field - only shown for training matches */}
-              {watchMatchType === "training" && (
+              {/* Result Field - only shown for competitive matches */}
+              {watchMatchType === "competitive" && (
                 <FormField control={form.control} name="result" render={({
                 field
               }) => <FormItem className="flex flex-col space-y-1.5">
