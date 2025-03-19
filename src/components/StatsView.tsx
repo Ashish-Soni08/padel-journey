@@ -89,14 +89,14 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <StatCard
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
-          value="7"
+          value="5"
           description="Since January 2023"
         />
         <StatCard
           icon={<Clock className="h-6 w-6" />}
-          title="Avg. Duration"
-          value="1h 20m"
-          description="Per match"
+          title="Total Duration"
+          value="6 hrs"
+          description="360 minutes played"
         />
       </div>
 
