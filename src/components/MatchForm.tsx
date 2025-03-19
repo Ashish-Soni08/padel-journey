@@ -106,7 +106,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
               <FormField control={form.control} name="date" render={({
               field
             }) => <FormItem className="flex flex-col">
-                    <FormLabel>Match Date</FormLabel>
+                    <FormLabel>Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -144,7 +144,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
               <FormField control={form.control} name="partner" render={({
               field
             }) => <FormItem>
-                    <FormLabel>Your Partner</FormLabel>
+                    <FormLabel>Players</FormLabel>
                     <FormControl>
                       <Input placeholder="Partner's name" {...field} />
                     </FormControl>
