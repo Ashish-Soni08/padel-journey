@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,12 +12,12 @@ interface StatsViewProps {
 
 // Sample data - would be replaced with real data in a production app
 const matchData = [
-  { month: 'Jan', matches: 2 },
-  { month: 'Feb', matches: 3 },
-  { month: 'Mar', matches: 5 },
-  { month: 'Apr', matches: 4 },
-  { month: 'May', matches: 6 },
-  { month: 'Jun', matches: 4 },
+  { month: 'Jan', matches: 1 },
+  { month: 'Feb', matches: 1 },
+  { month: 'Mar', matches: 3 },
+  { month: 'Apr', matches: 0 },
+  { month: 'May', matches: 0 },
+  { month: 'Jun', matches: 0 },
 ];
 
 // Updated to show 1 win, 1 loss, and 5 training sessions
