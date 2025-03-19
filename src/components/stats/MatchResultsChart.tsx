@@ -38,6 +38,27 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
     );
   };
 
+  // Custom tooltip component to show exact counts
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      return (
+        <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
+          <p className="font-semibold text-sm">{`${data.name}: ${data.value}`}</p>
+          <p className="text-xs text-muted-foreground">{`${(data.payload.percent * 100).toFixed(1)}% of total`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Calculate percentages for tooltip
+  const total = resultData.reduce((sum, item) => sum + item.value, 0);
+  const dataWithPercent = resultData.map(item => ({
+    ...item,
+    percent: total > 0 ? item.value / total : 0
+  }));
+
   return (
     <Card className="glass-panel col-span-1 animate-fade-up" style={{ animationDelay: "0.3s" }}>
       <CardHeader>
@@ -50,7 +71,7 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={resultData}
+              data={dataWithPercent}
               cx="50%"
               cy="50%"
               innerRadius={60}
@@ -62,18 +83,11 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
               label={renderCustomizedLabel}
               labelLine={false}
             >
-              {resultData.map((entry, index) => (
+              {dataWithPercent.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip 
-              contentStyle={{ 
-                borderRadius: '8px',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: 'none',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-              }}
-            />
+            <Tooltip content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
