@@ -90,7 +90,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
           value="5"
-          description="Since January 2023"
+          description="Since January 2025"
         />
         <StatCard
           icon={<Clock className="h-6 w-6" />}
