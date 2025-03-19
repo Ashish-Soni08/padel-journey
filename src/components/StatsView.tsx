@@ -20,11 +20,11 @@ const matchData = [
   { month: 'Jun', matches: 4 },
 ];
 
-// Updated to show 100 training sessions
+// Updated to show 5 training matches with no wins/losses
 const resultData = [
-  { name: 'Wins', value: 12 },
-  { name: 'Losses', value: 8 },
-  { name: 'Training', value: 100 }
+  { name: 'Wins', value: 0 },
+  { name: 'Losses', value: 0 },
+  { name: 'Training', value: 5 }
 ];
 
 // Last 5 matches sample data - ordered with most recent first
@@ -34,14 +34,14 @@ const recentMatches = [
     date: '2023-06-25',
     partners: ['Sarah', 'John'],
     type: 'Tournament',
-    result: 'Win'
+    result: 'Training'
   },
   { 
     id: 2, 
     date: '2023-06-18',
     partners: ['David'],
     type: 'Match',
-    result: 'Loss'
+    result: 'Training'
   },
   { 
     id: 3, 
@@ -55,14 +55,14 @@ const recentMatches = [
     date: '2023-06-08',
     partners: ['Carlos'],
     type: 'Match',
-    result: 'Loss'
+    result: 'Training'
   },
   { 
     id: 5, 
     date: '2023-06-01',
     partners: ['Alex'],
     type: 'Match',
-    result: 'Win'
+    result: 'Training'
   }
 ];
 
@@ -83,13 +83,13 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <StatCard
           icon={<Award className="h-6 w-6" />}
           title="Win Rate"
-          value="60%"
-          description="12 wins, 8 losses"
+          value="0%"
+          description="0 wins, 0 losses, 5 training"
         />
         <StatCard
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
-          value="20"
+          value="5"
           description="Since January 2023"
         />
         <StatCard
