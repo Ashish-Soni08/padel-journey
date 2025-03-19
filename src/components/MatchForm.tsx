@@ -99,8 +99,10 @@ const MatchForm: React.FC<MatchFormProps> = ({
 
       // Format player names for display
       const players = [data.player1];
-      if (data.player2) players.push(data.player2);
-      if (data.player3) players.push(data.player3);
+      if (watchMatchFormat === "2v2") {
+        if (data.player2) players.push(data.player2);
+        if (data.player3) players.push(data.player3);
+      }
       
       toast({
         title: "Match recorded!",
@@ -226,36 +228,40 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     </FormItem>} />}
               
               {/* Player fields */}
-              <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className={`col-span-1 md:col-span-2 grid grid-cols-1 ${watchMatchFormat === "1v1" ? "" : "md:grid-cols-3"} gap-4`}>
                 <FormField control={form.control} name="player1" render={({
                 field
                 }) => <FormItem className="flex flex-col space-y-1.5">
-                        <FormLabel>Player 1</FormLabel>
+                        <FormLabel>Player</FormLabel>
                         <FormControl>
                           <Input className="h-10" placeholder="Required player" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
                 
-                <FormField control={form.control} name="player2" render={({
-                field
-                }) => <FormItem className="flex flex-col space-y-1.5">
-                        <FormLabel>Player 2 (Optional)</FormLabel>
-                        <FormControl>
-                          <Input className="h-10" placeholder="Optional player" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>} />
-                
-                <FormField control={form.control} name="player3" render={({
-                field
-                }) => <FormItem className="flex flex-col space-y-1.5">
-                        <FormLabel>Player 3 (Optional)</FormLabel>
-                        <FormControl>
-                          <Input className="h-10" placeholder="Optional player" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>} />
+                {watchMatchFormat === "2v2" && (
+                  <>
+                    <FormField control={form.control} name="player2" render={({
+                    field
+                    }) => <FormItem className="flex flex-col space-y-1.5">
+                            <FormLabel>Player 2</FormLabel>
+                            <FormControl>
+                              <Input className="h-10" placeholder="Partner player" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>} />
+                    
+                    <FormField control={form.control} name="player3" render={({
+                    field
+                    }) => <FormItem className="flex flex-col space-y-1.5">
+                            <FormLabel>Player 3</FormLabel>
+                            <FormControl>
+                              <Input className="h-10" placeholder="Opponent player" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>} />
+                  </>
+                )}
               </div>
               
               <FormField control={form.control} name="duration" render={({
