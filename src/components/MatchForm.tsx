@@ -143,7 +143,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Date Field - consistent height with other form elements */}
+              {/* Date Field - with updated placeholder */}
               <FormField control={form.control} name="date" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -152,7 +152,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button variant={"outline"} className={cn("w-full h-10 pl-3 text-left font-normal justify-start", !field.value && "text-muted-foreground")}>
-                            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                            {field.value ? format(field.value, "PPP") : <span>Select match date</span>}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
                         </FormControl>
@@ -164,7 +164,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Match Type Field - with improved height consistency */}
+              {/* Match Type Field - with updated placeholder */}
               <FormField control={form.control} name="matchType" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -172,7 +172,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-10">
-                          <SelectValue placeholder="Select match type" />
+                          <SelectValue placeholder="Training or Competitive" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -183,7 +183,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
               
-              {/* Match Format Field - with improved height consistency */}
+              {/* Match Format Field - with updated placeholder */}
               <FormField control={form.control} name="matchFormat" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -191,7 +191,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-10">
-                          <SelectValue placeholder="Select match format" />
+                          <SelectValue placeholder="1v1 or 2v2" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -202,7 +202,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Result Field - only shown for competitive matches */}
+              {/* Result Field - only shown for competitive matches with updated placeholder */}
               {watchMatchType === "competitive" && <FormField control={form.control} name="result" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -210,7 +210,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="h-10">
-                            <SelectValue placeholder="Select result" />
+                            <SelectValue placeholder="Win, Loss, or Training" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -222,18 +222,18 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <FormMessage />
                     </FormItem>} />}
               
-              {/* Players Field - with improved height consistency */}
+              {/* Players Field - with updated placeholder */}
               <FormField control={form.control} name="players" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Players</FormLabel>
                     <FormControl>
-                      <Input className="h-10" placeholder="e.g., Carlos, Maria & John" {...field} />
+                      <Input className="h-10" placeholder="Names of players I played with" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
               
-              {/* Duration Field - with improved height consistency */}
+              {/* Duration Field - with updated placeholder */}
               <FormField control={form.control} name="duration" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -241,7 +241,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormControl>
                       <Input 
                         className="h-10" 
-                        placeholder="e.g., 60 min, 90 minutes (min. 60)" 
+                        placeholder="How long the match lasted" 
                         {...field} 
                       />
                     </FormControl>
@@ -251,7 +251,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
               
-              {/* Venue Field - with improved height consistency */}
+              {/* Venue Field - with updated placeholder */}
               <FormField control={form.control} name="venue" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5" style={{
@@ -259,19 +259,19 @@ const MatchForm: React.FC<MatchFormProps> = ({
             }}>
                     <FormLabel>Venue</FormLabel>
                     <FormControl>
-                      <Input className="h-10" placeholder="e.g., PadelCity Leipzig, Urban Courts Madrid" {...field} />
+                      <Input className="h-10" placeholder="Club name and location" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
             </div>
             
-            {/* Notes Field - full width */}
+            {/* Notes Field - with updated placeholder */}
             <FormField control={form.control} name="notes" render={({
             field
           }) => <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="e.g., Improved backhand smash today, Struggled with serve in windy conditions" className="min-h-[100px]" {...field} />
+                    <Textarea placeholder="Record thoughts on improvements or areas to work on" className="min-h-[100px]" {...field} />
                   </FormControl>
                   <FormDescription>
                     Record your thoughts, improvements or areas to work on
