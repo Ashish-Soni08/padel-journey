@@ -283,7 +283,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormControl>
                       <Input 
                         className="h-10" 
-                        placeholder="How long the match lasted" 
+                        placeholder="Duration in minutes (min. 60)" 
                         {...field} 
                       />
                     </FormControl>
