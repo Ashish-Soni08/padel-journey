@@ -20,9 +20,11 @@ const matchData = [
   { month: 'Jun', matches: 4 },
 ];
 
+// Updated to include training sessions
 const resultData = [
   { name: 'Wins', value: 12 },
   { name: 'Losses', value: 8 },
+  { name: 'Training', value: 5 }
 ];
 
 // Last 5 matches sample data - ordered with most recent first
@@ -64,7 +66,8 @@ const recentMatches = [
   }
 ];
 
-const COLORS = ['#0088FE', '#FF8042'];
+// Updated colors to include training (blue)
+const COLORS = ['#0088FE', '#FF8042', '#8B5CF6'];
 
 const StatsView: React.FC<StatsViewProps> = ({ className }) => {
   // Helper function to format partners list
