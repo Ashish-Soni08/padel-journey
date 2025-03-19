@@ -23,7 +23,7 @@ const matchData = [
 // Updated to show 1 win, 1 loss, and 5 training sessions
 const resultData = [
   { name: 'Wins', value: 1 },
-  { name: 'Losses', value: 1 },
+  { name: 'Losses', value: 0 },
   { name: 'Training', value: 5 }
 ];
 
@@ -83,8 +83,8 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <StatCard
           icon={<Award className="h-6 w-6" />}
           title="Win Rate"
-          value="50%"
-          description="1 win, 1 loss, 5 training"
+          value="100%"
+          description="1 win, 0 losses, 5 training"
         />
         <StatCard
           icon={<Calendar className="h-6 w-6" />}
