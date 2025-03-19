@@ -117,14 +117,15 @@ const MatchForm: React.FC<MatchFormProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Date Field - consistent height with other form elements */}
               <FormField control={form.control} name="date" render={({
               field
-            }) => <FormItem className="flex flex-col">
+            }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
-                          <Button variant={"outline"} className={cn("pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
+                          <Button variant={"outline"} className={cn("w-full h-10 pl-3 text-left font-normal justify-start", !field.value && "text-muted-foreground")}>
                             {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -137,13 +138,14 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
+              {/* Match Type Field - with improved height consistency */}
               <FormField control={form.control} name="matchType" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Match Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-10">
                           <SelectValue placeholder="Select match type" />
                         </SelectTrigger>
                       </FormControl>
@@ -155,13 +157,14 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
               
+              {/* Match Format Field - with improved height consistency */}
               <FormField control={form.control} name="matchFormat" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Match Format</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-10">
                           <SelectValue placeholder="Select match format" />
                         </SelectTrigger>
                       </FormControl>
@@ -173,13 +176,14 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
+              {/* Result Field - with improved height consistency */}
               <FormField control={form.control} name="result" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Result</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-10">
                           <SelectValue placeholder="Select result" />
                         </SelectTrigger>
                       </FormControl>
@@ -192,37 +196,41 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
               
+              {/* Players Field - with improved height consistency */}
               <FormField control={form.control} name="players" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Players</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Carlos, Maria & John" {...field} />
+                      <Input className="h-10" placeholder="e.g., Carlos, Maria & John" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
               
+              {/* Duration Field - with improved height consistency */}
               <FormField control={form.control} name="duration" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Duration</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 45 min, 1h 30min" {...field} />
+                      <Input className="h-10" placeholder="e.g., 45 min, 1h 30min" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
               
+              {/* Venue Field - with improved height consistency */}
               <FormField control={form.control} name="venue" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="flex flex-col space-y-1.5" style={{ gridColumn: "1 / -1" }}>
                     <FormLabel>Venue</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., PadelCity Leipzig, Urban Courts Madrid" {...field} />
+                      <Input className="h-10" placeholder="e.g., PadelCity Leipzig, Urban Courts Madrid" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
             </div>
             
+            {/* Notes Field - full width */}
             <FormField control={form.control} name="notes" render={({
             field
           }) => <FormItem>
