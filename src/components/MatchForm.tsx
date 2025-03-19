@@ -234,7 +234,11 @@ const MatchForm: React.FC<MatchFormProps> = ({
                 }) => <FormItem className="flex flex-col space-y-1.5">
                         <FormLabel>Player</FormLabel>
                         <FormControl>
-                          <Input className="h-10" placeholder="Required player" {...field} />
+                          <Input 
+                            className="h-10" 
+                            placeholder={watchMatchFormat === "1v1" ? "e.g. John Smith" : "e.g. You"} 
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
@@ -246,7 +250,11 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     }) => <FormItem className="flex flex-col space-y-1.5">
                             <FormLabel>Player 2</FormLabel>
                             <FormControl>
-                              <Input className="h-10" placeholder="Partner player" {...field} />
+                              <Input 
+                                className="h-10" 
+                                placeholder="e.g. Your Partner" 
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>} />
@@ -256,7 +264,11 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     }) => <FormItem className="flex flex-col space-y-1.5">
                             <FormLabel>Player 3</FormLabel>
                             <FormControl>
-                              <Input className="h-10" placeholder="Opponent player" {...field} />
+                              <Input 
+                                className="h-10" 
+                                placeholder="e.g. Opponent" 
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>} />
