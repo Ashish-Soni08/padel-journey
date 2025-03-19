@@ -26,7 +26,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             Beginner
           </Badge>
           <Badge className="bg-primary text-white text-md px-3 py-1 rounded-full shadow-lg">
-            Playing Hand: Right
+            Right-Handed
           </Badge>
         </div>
       </div>
