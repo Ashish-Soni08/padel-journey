@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -25,9 +26,11 @@ const formSchema = z.object({
   matchFormat: z.enum(["1v1", "2v2"], {
     required_error: "Match format is required"
   }),
-  players: z.string().min(2, {
-    message: "Please enter players' names"
+  player1: z.string().min(2, {
+    message: "Please enter the first player's name"
   }),
+  player2: z.string().optional(),
+  player3: z.string().optional(),
   result: z.enum(["win", "loss", "training"]).optional(),
   duration: z.string()
     .min(1, { message: "Please enter the match duration" })
@@ -67,7 +70,9 @@ const MatchForm: React.FC<MatchFormProps> = ({
       date: new Date(),
       matchType: "training",
       matchFormat: "2v2",
-      players: "",
+      player1: "",
+      player2: "",
+      player3: "",
       result: undefined,
       duration: "",
       venue: "",
@@ -76,6 +81,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
   });
 
   const watchMatchType = form.watch("matchType");
+  const watchMatchFormat = form.watch("matchFormat");
 
   useEffect(() => {
     if (watchMatchType === "training") {
@@ -91,20 +97,32 @@ const MatchForm: React.FC<MatchFormProps> = ({
       await new Promise(r => setTimeout(r, 800));
       console.log("Match data:", data);
 
+      // Format player names for display
+      const players = [data.player1];
+      if (data.player2) players.push(data.player2);
+      if (data.player3) players.push(data.player3);
+      
       toast({
         title: "Match recorded!",
         description: `Your ${data.matchType === "training" ? "training session" : data.result} at ${data.venue} has been saved.`
       });
 
       if (onMatchAdded) {
-        onMatchAdded(data);
+        // Convert to original format for backward compatibility
+        const formattedData = {
+          ...data,
+          players: players.join(", ")
+        };
+        onMatchAdded(formattedData as any);
       }
 
       form.reset({
         date: new Date(),
         matchType: "training",
         matchFormat: "2v2",
-        players: "",
+        player1: "",
+        player2: "",
+        player3: "",
         result: undefined,
         duration: "",
         venue: "",
@@ -207,15 +225,38 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <FormMessage />
                     </FormItem>} />}
               
-              <FormField control={form.control} name="players" render={({
-              field
-            }) => <FormItem className="flex flex-col space-y-1.5">
-                    <FormLabel>Players</FormLabel>
-                    <FormControl>
-                      <Input className="h-10" placeholder="Names of players I played with" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>} />
+              {/* Player fields */}
+              <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormField control={form.control} name="player1" render={({
+                field
+                }) => <FormItem className="flex flex-col space-y-1.5">
+                        <FormLabel>Player 1</FormLabel>
+                        <FormControl>
+                          <Input className="h-10" placeholder="Required player" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+                
+                <FormField control={form.control} name="player2" render={({
+                field
+                }) => <FormItem className="flex flex-col space-y-1.5">
+                        <FormLabel>Player 2 (Optional)</FormLabel>
+                        <FormControl>
+                          <Input className="h-10" placeholder="Optional player" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+                
+                <FormField control={form.control} name="player3" render={({
+                field
+                }) => <FormItem className="flex flex-col space-y-1.5">
+                        <FormLabel>Player 3 (Optional)</FormLabel>
+                        <FormControl>
+                          <Input className="h-10" placeholder="Optional player" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+              </div>
               
               <FormField control={form.control} name="duration" render={({
               field
@@ -264,4 +305,3 @@ const MatchForm: React.FC<MatchFormProps> = ({
 };
 
 export default MatchForm;
-
