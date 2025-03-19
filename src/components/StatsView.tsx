@@ -27,41 +27,41 @@ const resultData = [
   { name: 'Training', value: 5 }
 ];
 
-// Last 5 matches sample data - ordered with most recent first
+// Updated last 5 matches with the new partner data
 const recentMatches = [
   { 
     id: 1, 
-    date: '2023-06-25',
-    partners: ['Sarah', 'John'],
-    type: 'Tournament',
+    date: '2023-03-15',
+    partners: ['Johanna', 'Anoosha', 'Renna'],
+    type: 'Training',
     result: 'Training'
   },
   { 
     id: 2, 
-    date: '2023-06-18',
-    partners: ['David'],
-    type: 'Match',
+    date: '2023-03-13',
+    partners: ['Jannes', 'Carolin', 'Jonathan'],
+    type: 'Training',
     result: 'Training'
   },
   { 
     id: 3, 
-    date: '2023-06-15',
-    partners: ['Michael', 'Emma'],
+    date: '2023-03-09',
+    partners: ['Kerstin', 'Annie', 'Bella'],
     type: 'Training',
     result: 'Training'
   },
   { 
     id: 4, 
-    date: '2023-06-08',
-    partners: ['Carlos'],
-    type: 'Match',
+    date: '2023-02-17',
+    partners: ['Stephan', 'John', 'Christian'],
+    type: 'Training',
     result: 'Training'
   },
   { 
     id: 5, 
-    date: '2023-06-01',
-    partners: ['Alex'],
-    type: 'Match',
+    date: '2023-01-26',
+    partners: ['Manoj'],
+    type: 'Training',
     result: 'Training'
   }
 ];
