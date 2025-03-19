@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 const formSchema = z.object({
   date: z.date({
     required_error: "Match date is required"
@@ -28,9 +30,13 @@ const formSchema = z.object({
     message: "Please enter players' names"
   }),
   result: z.enum(["win", "loss", "training"]).optional(),
-  duration: z.string().min(1, {
-    message: "Please enter the match duration"
-  }),
+  duration: z.string()
+    .min(1, { message: "Please enter the match duration" })
+    .refine((val) => {
+      // Extract numeric value (assuming format like "60 min", "90 minutes", etc.)
+      const numericValue = parseInt(val.replace(/[^0-9]/g, ''));
+      return !isNaN(numericValue) && numericValue >= 60;
+    }, { message: "Duration must be at least 60 minutes" }),
   venue: z.string().min(2, {
     message: "Please enter the venue name"
   }),
@@ -46,11 +52,14 @@ const formSchema = z.object({
   message: "Result is required for competitive matches",
   path: ["result"]
 });
+
 type FormData = z.infer<typeof formSchema>;
+
 interface MatchFormProps {
   className?: string;
   onMatchAdded?: (data: FormData) => void;
 }
+
 const MatchForm: React.FC<MatchFormProps> = ({
   className,
   onMatchAdded
@@ -82,6 +91,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       form.setValue("result", "win");
     }
   }, [watchMatchType, form]);
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
@@ -122,6 +132,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       setIsSubmitting(false);
     }
   };
+
   return <Card className={cn("w-full max-w-3xl mx-auto glass-panel animate-fade-up", className)} style={{
     animationDelay: "0.3s"
   }}>
@@ -228,8 +239,15 @@ const MatchForm: React.FC<MatchFormProps> = ({
             }) => <FormItem className="flex flex-col space-y-1.5">
                     <FormLabel>Duration</FormLabel>
                     <FormControl>
-                      <Input className="h-10" placeholder="e.g., 45 min, 1h 30min" {...field} />
+                      <Input 
+                        className="h-10" 
+                        placeholder="e.g., 60 min, 90 minutes (min. 60)" 
+                        {...field} 
+                      />
                     </FormControl>
+                    <FormDescription>
+                      Matches must be at least 60 minutes
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>} />
               
@@ -269,4 +287,5 @@ const MatchForm: React.FC<MatchFormProps> = ({
       </CardContent>
     </Card>;
 };
+
 export default MatchForm;
