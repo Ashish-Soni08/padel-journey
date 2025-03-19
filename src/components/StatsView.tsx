@@ -1,12 +1,14 @@
-
 import React, { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Award, Clock, Calendar, Activity, Users, Percent } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getAllMatches, getMatchStats, MatchData } from "@/services/matchDatabase";
+import { MatchData } from "@/services/matchDatabase";
+import { getAllMatchesFromSupabase, getMatchStatsFromSupabase, subscribeToMatches } from "@/services/matchSupabase";
 import { format } from "date-fns";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { supabase } from "@/integrations/supabase/client";
 
 interface StatsViewProps {
   className?: string;
@@ -28,40 +30,70 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
   });
   const [matchData, setMatchData] = useState<{ month: string; matches: number }[]>([]);
   const [resultData, setResultData] = useState<{ name: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Load data from database
+  // Load data from Supabase
   useEffect(() => {
-    const loadData = () => {
-      const allMatches = getAllMatches();
-      const matchStats = getMatchStats();
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const allMatches = await getAllMatchesFromSupabase();
+        const matchStats = await getMatchStatsFromSupabase();
+        
+        setMatches(allMatches);
+        setStats(matchStats);
+        
+        // Format data for charts
+        const monthData = matchStats.monthlyMatches
+          .map((count, index) => ({
+            month: MONTHS[index],
+            matches: count
+          }));
+        
+        const resultData = [
+          { name: 'Wins', value: matchStats.resultCounts.win },
+          { name: 'Losses', value: matchStats.resultCounts.loss },
+          { name: 'Training', value: matchStats.resultCounts.training }
+        ];
+        
+        setMatchData(monthData);
+        setResultData(resultData);
+      } catch (error) {
+        console.error('Error loading match data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    // Initial load
+    loadData();
+    
+    // Set up real-time subscription
+    const channel = subscribeToMatches(async (updatedMatches) => {
+      setMatches(updatedMatches);
+      const updatedStats = await getMatchStatsFromSupabase();
+      setStats(updatedStats);
       
-      setMatches(allMatches);
-      setStats(matchStats);
-      
-      // Format data for charts
-      const monthData = matchStats.monthlyMatches
+      // Update chart data
+      const monthData = updatedStats.monthlyMatches
         .map((count, index) => ({
           month: MONTHS[index],
           matches: count
         }));
       
       const resultData = [
-        { name: 'Wins', value: matchStats.resultCounts.win },
-        { name: 'Losses', value: matchStats.resultCounts.loss },
-        { name: 'Training', value: matchStats.resultCounts.training }
+        { name: 'Wins', value: updatedStats.resultCounts.win },
+        { name: 'Losses', value: updatedStats.resultCounts.loss },
+        { name: 'Training', value: updatedStats.resultCounts.training }
       ];
       
       setMatchData(monthData);
       setResultData(resultData);
-    };
-    
-    loadData();
-    
-    // Add event listener for storage changes if multiple tabs are open
-    window.addEventListener('storage', loadData);
+    });
     
     return () => {
-      window.removeEventListener('storage', loadData);
+      // Clean up subscription on unmount
+      supabase.removeChannel(channel);
     };
   }, []);
 
@@ -112,6 +144,15 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
 
   // Get recent matches (top 5)
   const recentMatches = matches.slice(0, 5);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[400px]">
+        <ReloadIcon className="h-10 w-10 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading stats...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("space-y-8 animate-fade-up", className)}>
@@ -222,38 +263,44 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <CardContent>
           <h3 className="font-medium mb-4">Last 5 Matches</h3>
           <div className="space-y-4">
-            {recentMatches.map((match) => {
-              const partners = [];
-              if (match.player1) partners.push(match.player1);
-              if (match.player2) partners.push(match.player2);
-              if (match.player3) partners.push(match.player3);
-              
-              return (
-                <div key={match.id} className="flex items-center p-3 border rounded-lg">
-                  <div className="flex items-center flex-1">
-                    <Avatar className="h-12 w-12 mr-4">
-                      <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="User" />
-                      <AvatarFallback>AS</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <span className="font-medium">You with {formatPartners(partners)}</span>
-                      <div className="text-sm text-muted-foreground">
-                        {format(match.date, 'yyyy-MM-dd')}
-                      </div>
-                      <div className={`text-sm mt-1 font-medium ${
-                        match.result === 'win' 
-                          ? 'text-green-500' 
-                          : match.result === 'loss' 
-                            ? 'text-red-500' 
-                            : 'text-blue-500'
-                      }`}>
-                        {match.result === 'win' ? 'Win' : match.result === 'loss' ? 'Loss' : 'Training'}
+            {recentMatches.length > 0 ? (
+              recentMatches.map((match) => {
+                const partners = [];
+                if (match.player1) partners.push(match.player1);
+                if (match.player2) partners.push(match.player2);
+                if (match.player3) partners.push(match.player3);
+                
+                return (
+                  <div key={match.id} className="flex items-center p-3 border rounded-lg">
+                    <div className="flex items-center flex-1">
+                      <Avatar className="h-12 w-12 mr-4">
+                        <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="User" />
+                        <AvatarFallback>AS</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <span className="font-medium">You with {formatPartners(partners)}</span>
+                        <div className="text-sm text-muted-foreground">
+                          {format(match.date, 'yyyy-MM-dd')}
+                        </div>
+                        <div className={`text-sm mt-1 font-medium ${
+                          match.result === 'win' 
+                            ? 'text-green-500' 
+                            : match.result === 'loss' 
+                              ? 'text-red-500' 
+                              : 'text-blue-500'
+                        }`}>
+                          {match.result === 'win' ? 'Win' : match.result === 'loss' ? 'Loss' : 'Training'}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="text-center py-6 text-muted-foreground">
+                No matches found. Add your first match to see stats!
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

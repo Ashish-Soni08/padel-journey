@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { addMatch } from "@/services/matchDatabase";
+import { addMatchToSupabase } from "@/services/matchSupabase";
 
 const formSchema = z.object({
   date: z.date({
@@ -94,10 +94,8 @@ const MatchForm: React.FC<MatchFormProps> = ({
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      await new Promise(r => setTimeout(r, 800));
-      
-      // Save match to database
-      addMatch({
+      // Save match to Supabase
+      const newMatch = await addMatchToSupabase({
         date: data.date,
         matchType: data.matchType,
         matchFormat: data.matchFormat,
@@ -109,6 +107,10 @@ const MatchForm: React.FC<MatchFormProps> = ({
         venue: data.venue,
         notes: data.notes
       });
+
+      if (!newMatch) {
+        throw new Error("Failed to save match data");
+      }
 
       // Format player names for display
       const players = [data.player1];
