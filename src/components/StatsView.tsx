@@ -20,11 +20,11 @@ const matchData = [
   { month: 'Jun', matches: 4 },
 ];
 
-// Updated to include training sessions
+// Updated to show 100 training sessions
 const resultData = [
   { name: 'Wins', value: 12 },
   { name: 'Losses', value: 8 },
-  { name: 'Training', value: 5 }
+  { name: 'Training', value: 100 }
 ];
 
 // Last 5 matches sample data - ordered with most recent first
