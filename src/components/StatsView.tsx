@@ -25,37 +25,55 @@ const resultData = [
   { name: 'Losses', value: 8 },
 ];
 
-// Last 3 matches sample data
+// Last 5 matches sample data - ordered with most recent first
 const recentMatches = [
   { 
     id: 1, 
-    date: '2023-06-15',
-    partner: 'Sarah',
-    opponents: 'James & Emma',
-    result: 'Win',
-    score: '6-4, 7-5'
+    date: '2023-06-25',
+    partners: ['Sarah', 'John'],
+    type: 'Tournament',
+    result: 'Win'
   },
   { 
     id: 2, 
-    date: '2023-06-08',
-    partner: 'David',
-    opponents: 'Carlos & Sophia',
-    result: 'Loss',
-    score: '3-6, 4-6'
+    date: '2023-06-18',
+    partners: ['David'],
+    type: 'Match',
+    result: 'Loss'
   },
   { 
     id: 3, 
+    date: '2023-06-15',
+    partners: ['Michael', 'Emma'],
+    type: 'Training',
+    result: 'Training'
+  },
+  { 
+    id: 4, 
+    date: '2023-06-08',
+    partners: ['Carlos'],
+    type: 'Match',
+    result: 'Loss'
+  },
+  { 
+    id: 5, 
     date: '2023-06-01',
-    partner: 'Michael',
-    opponents: 'Alex & Rachel',
-    result: 'Win',
-    score: '6-3, 6-4'
+    partners: ['Alex'],
+    type: 'Match',
+    result: 'Win'
   }
 ];
 
 const COLORS = ['#0088FE', '#FF8042'];
 
 const StatsView: React.FC<StatsViewProps> = ({ className }) => {
+  // Helper function to format partners list
+  const formatPartners = (partners: string[]) => {
+    if (partners.length === 0) return "";
+    if (partners.length === 1) return partners[0];
+    return partners.join(", ");
+  };
+
   return (
     <div className={cn("space-y-8 animate-fade-up", className)}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -163,22 +181,28 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <h3 className="font-medium mb-4">Last 3 Matches</h3>
+          <h3 className="font-medium mb-4">Last 5 Matches</h3>
           <div className="space-y-4">
             {recentMatches.map((match) => (
               <div key={match.id} className="flex items-center p-3 border rounded-lg">
                 <div className="flex items-center flex-1">
                   <Avatar className="h-12 w-12 mr-4">
-                    <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="Ashish" />
+                    <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="User" />
                     <AvatarFallback>AS</AvatarFallback>
                   </Avatar>
                   <div>
-                    <span className="font-medium">You & {match.partner}</span>
+                    <span className="font-medium">You with {formatPartners(match.partners)}</span>
                     <div className="text-sm text-muted-foreground">
-                      vs {match.opponents} • {match.date}
+                      {match.date}
                     </div>
-                    <div className={`text-sm mt-1 font-medium ${match.result === 'Win' ? 'text-green-500' : 'text-red-500'}`}>
-                      {match.result}: {match.score}
+                    <div className={`text-sm mt-1 font-medium ${
+                      match.result === 'Win' 
+                        ? 'text-green-500' 
+                        : match.result === 'Loss' 
+                          ? 'text-red-500' 
+                          : 'text-blue-500'
+                    }`}>
+                      {match.result}
                     </div>
                   </div>
                 </div>
