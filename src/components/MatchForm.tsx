@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -15,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 const formSchema = z.object({
   date: z.date({
     required_error: "Match date is required"
@@ -37,7 +35,7 @@ const formSchema = z.object({
     message: "Please enter the venue name"
   }),
   notes: z.string().optional()
-}).refine((data) => {
+}).refine(data => {
   // If matchType is training, result field should not be required
   if (data.matchType === "training") {
     return true;
@@ -48,20 +46,16 @@ const formSchema = z.object({
   message: "Result is required for competitive matches",
   path: ["result"]
 });
-
 type FormData = z.infer<typeof formSchema>;
-
 interface MatchFormProps {
   className?: string;
   onMatchAdded?: (data: FormData) => void;
 }
-
 const MatchForm: React.FC<MatchFormProps> = ({
   className,
   onMatchAdded
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,7 +72,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
 
   // Get the current value of matchType
   const watchMatchType = form.watch("matchType");
-  
+
   // Reset result field when matchType changes to training
   useEffect(() => {
     if (watchMatchType === "training") {
@@ -88,7 +82,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
       form.setValue("result", "win");
     }
   }, [watchMatchType, form]);
-
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
@@ -129,7 +122,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
       setIsSubmitting(false);
     }
   };
-
   return <Card className={cn("w-full max-w-3xl mx-auto glass-panel animate-fade-up", className)} style={{
     animationDelay: "0.3s"
   }}>
@@ -165,7 +157,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
               <FormField control={form.control} name="matchType" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
-                    <FormLabel>Match Type</FormLabel>
+                    <FormLabel>Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-10">
@@ -184,7 +176,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
               <FormField control={form.control} name="matchFormat" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
-                    <FormLabel>Match Format</FormLabel>
+                    <FormLabel>Format</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-10">
@@ -200,10 +192,9 @@ const MatchForm: React.FC<MatchFormProps> = ({
                   </FormItem>} />
 
               {/* Result Field - only shown for competitive matches */}
-              {watchMatchType === "competitive" && (
-                <FormField control={form.control} name="result" render={({
-                field
-              }) => <FormItem className="flex flex-col space-y-1.5">
+              {watchMatchType === "competitive" && <FormField control={form.control} name="result" render={({
+              field
+            }) => <FormItem className="flex flex-col space-y-1.5">
                       <FormLabel>Result</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
@@ -218,8 +209,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                         </SelectContent>
                       </Select>
                       <FormMessage />
-                    </FormItem>} />
-              )}
+                    </FormItem>} />}
               
               {/* Players Field - with improved height consistency */}
               <FormField control={form.control} name="players" render={({
@@ -246,7 +236,9 @@ const MatchForm: React.FC<MatchFormProps> = ({
               {/* Venue Field - with improved height consistency */}
               <FormField control={form.control} name="venue" render={({
               field
-            }) => <FormItem className="flex flex-col space-y-1.5" style={{ gridColumn: "1 / -1" }}>
+            }) => <FormItem className="flex flex-col space-y-1.5" style={{
+              gridColumn: "1 / -1"
+            }}>
                     <FormLabel>Venue</FormLabel>
                     <FormControl>
                       <Input className="h-10" placeholder="e.g., PadelCity Leipzig, Urban Courts Madrid" {...field} />
@@ -261,11 +253,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
           }) => <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="e.g., Improved backhand smash today, Struggled with serve in windy conditions"
-                      className="min-h-[100px]" 
-                      {...field} 
-                    />
+                    <Textarea placeholder="e.g., Improved backhand smash today, Struggled with serve in windy conditions" className="min-h-[100px]" {...field} />
                   </FormControl>
                   <FormDescription>
                     Record your thoughts, improvements or areas to work on
@@ -281,5 +269,4 @@ const MatchForm: React.FC<MatchFormProps> = ({
       </CardContent>
     </Card>;
 };
-
 export default MatchForm;
