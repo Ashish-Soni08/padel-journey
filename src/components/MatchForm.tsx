@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -11,49 +12,60 @@ import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 const formSchema = z.object({
   date: z.date({
     required_error: "Match date is required"
   }),
-  opponents: z.string().min(2, {
-    message: "Please enter your opponents' names"
+  matchType: z.enum(["training", "competitive"], {
+    required_error: "Match type is required"
   }),
-  partner: z.string().min(2, {
-    message: "Please enter your partner's name"
+  matchFormat: z.enum(["1v1", "2v2"], {
+    required_error: "Match format is required"
   }),
-  result: z.enum(["win", "loss"]),
-  score: z.string().min(1, {
-    message: "Please enter the match score"
+  players: z.string().min(2, {
+    message: "Please enter players' names"
   }),
+  result: z.enum(["win", "loss", "training"]),
   duration: z.string().min(1, {
     message: "Please enter the match duration"
   }),
+  venue: z.string().min(2, {
+    message: "Please enter the venue name"
+  }),
   notes: z.string().optional()
 });
+
 type FormData = z.infer<typeof formSchema>;
+
 interface MatchFormProps {
   className?: string;
   onMatchAdded?: (data: FormData) => void;
 }
+
 const MatchForm: React.FC<MatchFormProps> = ({
   className,
   onMatchAdded
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: new Date(),
-      opponents: "",
-      partner: "",
+      matchType: "training",
+      matchFormat: "2v2",
+      players: "",
       result: "win",
-      score: "",
       duration: "",
+      venue: "",
       notes: ""
     }
   });
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
@@ -64,7 +76,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       // Show success toast
       toast({
         title: "Match recorded!",
-        description: `Your ${data.result} against ${data.opponents} has been saved.`
+        description: `Your ${data.result} at ${data.venue} has been saved.`
       });
 
       // Call the callback if provided
@@ -75,11 +87,12 @@ const MatchForm: React.FC<MatchFormProps> = ({
       // Reset form
       form.reset({
         date: new Date(),
-        opponents: "",
-        partner: "",
+        matchType: "training",
+        matchFormat: "2v2",
+        players: "",
         result: "win",
-        score: "",
         duration: "",
+        venue: "",
         notes: ""
       });
     } catch (error) {
@@ -93,6 +106,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       setIsSubmitting(false);
     }
   };
+
   return <Card className={cn("w-full max-w-3xl mx-auto glass-panel animate-fade-up", className)} style={{
     animationDelay: "0.3s"
   }}>
@@ -123,6 +137,42 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
+              <FormField control={form.control} name="matchType" render={({
+              field
+            }) => <FormItem>
+                    <FormLabel>Match Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select match type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="training">Training</SelectItem>
+                        <SelectItem value="competitive">Competitive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>} />
+              
+              <FormField control={form.control} name="matchFormat" render={({
+              field
+            }) => <FormItem>
+                    <FormLabel>Match Format</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select match format" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="1v1">1v1</SelectItem>
+                        <SelectItem value="2v2">2v2</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>} />
+
               <FormField control={form.control} name="result" render={({
               field
             }) => <FormItem>
@@ -136,37 +186,18 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <SelectContent>
                         <SelectItem value="win">Win</SelectItem>
                         <SelectItem value="loss">Loss</SelectItem>
+                        <SelectItem value="training">Training</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>} />
               
-              <FormField control={form.control} name="partner" render={({
+              <FormField control={form.control} name="players" render={({
               field
             }) => <FormItem>
                     <FormLabel>Players</FormLabel>
                     <FormControl>
-                      <Input placeholder="Partner's name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>} />
-              
-              <FormField control={form.control} name="opponents" render={({
-              field
-            }) => <FormItem>
-                    <FormLabel>Opponents</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Opponents' names" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>} />
-              
-              <FormField control={form.control} name="score" render={({
-              field
-            }) => <FormItem>
-                    <FormLabel>Score</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., 6-4, 3-6, 6-2" {...field} />
+                      <Input placeholder="e.g., Carlos, Maria & John" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
@@ -176,7 +207,17 @@ const MatchForm: React.FC<MatchFormProps> = ({
             }) => <FormItem>
                     <FormLabel>Duration</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 1h 30m" {...field} />
+                      <Input placeholder="e.g., 45 min, 1h 30min" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>} />
+              
+              <FormField control={form.control} name="venue" render={({
+              field
+            }) => <FormItem>
+                    <FormLabel>Venue</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., PadelCity Leipzig, Urban Courts Madrid" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
@@ -187,10 +228,14 @@ const MatchForm: React.FC<MatchFormProps> = ({
           }) => <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
-                    <Input placeholder="Any observations or highlights..." {...field} />
+                    <Textarea 
+                      placeholder="e.g., Improved backhand smash today, Struggled with serve in windy conditions"
+                      className="min-h-[100px]" 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormDescription>
-                    Record your thoughts or highlights from the match
+                    Record your thoughts, improvements or areas to work on
                   </FormDescription>
                   <FormMessage />
                 </FormItem>} />
@@ -203,4 +248,5 @@ const MatchForm: React.FC<MatchFormProps> = ({
       </CardContent>
     </Card>;
 };
+
 export default MatchForm;
