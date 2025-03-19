@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Award, Clock, Calendar, Activity, Users, Percent } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface StatsViewProps {
   className?: string;
@@ -22,6 +23,34 @@ const matchData = [
 const resultData = [
   { name: 'Wins', value: 12 },
   { name: 'Losses', value: 8 },
+];
+
+// Last 3 matches sample data
+const recentMatches = [
+  { 
+    id: 1, 
+    date: '2023-06-15',
+    partner: 'Sarah',
+    opponents: 'James & Emma',
+    result: 'Win',
+    score: '6-4, 7-5'
+  },
+  { 
+    id: 2, 
+    date: '2023-06-08',
+    partner: 'David',
+    opponents: 'Carlos & Sophia',
+    result: 'Loss',
+    score: '3-6, 4-6'
+  },
+  { 
+    id: 3, 
+    date: '2023-06-01',
+    partner: 'Michael',
+    opponents: 'Alex & Rachel',
+    result: 'Win',
+    score: '6-3, 6-4'
+  }
 ];
 
 const COLORS = ['#0088FE', '#FF8042'];
@@ -130,45 +159,31 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <CardHeader>
           <CardTitle className="flex items-center">
             <Users className="h-5 w-5 mr-2" />
-            Common Partners and Opponents
+            Partners
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-medium mb-2">Frequent Partners</h3>
-              <ul className="space-y-2">
-                <li className="flex justify-between">
-                  <span>David</span>
-                  <span className="text-muted-foreground">6 matches</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Sarah</span>
-                  <span className="text-muted-foreground">4 matches</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Michael</span>
-                  <span className="text-muted-foreground">3 matches</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-2">Common Opponents</h3>
-              <ul className="space-y-2">
-                <li className="flex justify-between">
-                  <span>James & Emma</span>
-                  <span className="text-muted-foreground">5 matches</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Carlos & Sophia</span>
-                  <span className="text-muted-foreground">3 matches</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Alex & Rachel</span>
-                  <span className="text-muted-foreground">2 matches</span>
-                </li>
-              </ul>
-            </div>
+          <h3 className="font-medium mb-4">Last 3 Matches</h3>
+          <div className="space-y-4">
+            {recentMatches.map((match) => (
+              <div key={match.id} className="flex items-center p-3 border rounded-lg">
+                <div className="flex items-center flex-1">
+                  <Avatar className="h-12 w-12 mr-4">
+                    <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="Ashish" />
+                    <AvatarFallback>AS</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <span className="font-medium">You & {match.partner}</span>
+                    <div className="text-sm text-muted-foreground">
+                      vs {match.opponents} • {match.date}
+                    </div>
+                    <div className={`text-sm mt-1 font-medium ${match.result === 'Win' ? 'text-green-500' : 'text-red-500'}`}>
+                      {match.result}: {match.score}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
