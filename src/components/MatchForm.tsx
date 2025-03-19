@@ -236,7 +236,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                         <FormControl>
                           <Input 
                             className="h-10" 
-                            placeholder={watchMatchFormat === "1v1" ? "e.g. John Smith" : "e.g. You"} 
+                            placeholder={watchMatchFormat === "1v1" ? "e.g. John Smith" : "Player name"} 
                             {...field} 
                           />
                         </FormControl>
@@ -252,7 +252,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                             <FormControl>
                               <Input 
                                 className="h-10" 
-                                placeholder="e.g. Your Partner" 
+                                placeholder="Player name" 
                                 {...field} 
                               />
                             </FormControl>
@@ -266,7 +266,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                             <FormControl>
                               <Input 
                                 className="h-10" 
-                                placeholder="e.g. Opponent" 
+                                placeholder="Player name" 
                                 {...field} 
                               />
                             </FormControl>
