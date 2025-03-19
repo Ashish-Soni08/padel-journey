@@ -14,7 +14,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   return <div className={cn("flex flex-col items-center space-y-6 py-8", className)}>
       <h1 className="text-4xl tracking-tight animate-fade-in font-bold text-center md:text-7xl">Ashish's Padel Journey </h1>
       
-      <div className="flex flex-col items-center space-y-4 animate-fade-up" style={{
+      <div className="flex flex-col items-center space-y-5 animate-fade-up" style={{
       animationDelay: "0.2s"
     }}>
         <div className="overflow-visible h-32 w-32 md:h-48 md:w-48">
