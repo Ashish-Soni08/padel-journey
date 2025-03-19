@@ -1,13 +1,13 @@
+
 import React, { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Award, Clock, Calendar, Activity, Users, Percent } from "lucide-react";
+import { Award, Clock, Calendar, Activity, Users, Percent, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MatchData } from "@/services/matchDatabase";
 import { getAllMatchesFromSupabase, getMatchStatsFromSupabase, subscribeToMatches } from "@/services/matchSupabase";
 import { format } from "date-fns";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { supabase } from "@/integrations/supabase/client";
 
 interface StatsViewProps {
@@ -148,7 +148,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-[400px]">
-        <ReloadIcon className="h-10 w-10 animate-spin text-primary mb-4" />
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
         <p className="text-muted-foreground">Loading stats...</p>
       </div>
     );
@@ -280,7 +280,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
                       <div>
                         <span className="font-medium">You with {formatPartners(partners)}</span>
                         <div className="text-sm text-muted-foreground">
-                          {format(match.date, 'yyyy-MM-dd')}
+                          {format(new Date(match.date), 'yyyy-MM-dd')}
                         </div>
                         <div className={`text-sm mt-1 font-medium ${
                           match.result === 'win' 
