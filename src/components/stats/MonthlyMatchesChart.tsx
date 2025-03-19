@@ -35,25 +35,25 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
             data={matchData}
             margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(150, 150, 150, 0.1)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis 
               dataKey="month" 
-              tick={{ fill: '#F1F1F1' }}  
+              tick={{ fill: 'var(--foreground)' }}  
               axisLine={{ stroke: 'var(--border)' }}
             />
             <YAxis 
               allowDecimals={false} 
-              tick={{ fill: '#F1F1F1' }}  
+              tick={{ fill: 'var(--foreground)' }}  
               axisLine={{ stroke: 'var(--border)' }}
             />
             <Tooltip content={<CustomBarTooltip />} />
             <Legend 
-              formatter={(value) => <span style={{ color: '#F1F1F1' }}>{value}</span>}
+              formatter={(value) => <span style={{ color: 'var(--foreground)' }}>{value}</span>}
             />
             <Bar 
               name="Match Count" 
               dataKey="matches" 
-              fill="#0088FE" 
+              fill="hsl(var(--primary))" 
               radius={[4, 4, 0, 0]}
               animationDuration={1500}
               barSize={30}

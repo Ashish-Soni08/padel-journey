@@ -4,8 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Percent } from "lucide-react";
 
-// Colors for the charts - optimized for dark mode
-const COLORS = ['#0088FE', '#FF8042', '#8B5CF6'];
+// Colors from the theme variables - these will respect the current theme
+const COLORS = [
+  'hsl(var(--chart-1))',
+  'hsl(var(--chart-3))',
+  'hsl(var(--chart-5))'
+];
 
 interface MatchResultsChartProps {
   resultData: { name: string; value: number }[];
@@ -76,7 +80,7 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
               cy="50%"
               innerRadius={60}
               outerRadius={100}
-              fill="#8884d8"
+              fill="hsl(var(--primary))"
               paddingAngle={5}
               dataKey="value"
               animationDuration={1500}
