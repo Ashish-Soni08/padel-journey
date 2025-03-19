@@ -25,9 +25,9 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
       
       <ProfileHeader />
       
-      <div className="mt-6 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+      <div className="mt-3 animate-fade-up" style={{ animationDelay: "0.4s" }}>
         <Tabs defaultValue={defaultTab} className="w-full">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-2">
             <TabsList className="grid grid-cols-2 w-full max-w-md">
               <TabsTrigger 
                 value="home"
