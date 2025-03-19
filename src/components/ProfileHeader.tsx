@@ -19,14 +19,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <div className="overflow-visible h-32 w-32 md:h-48 md:w-48">
           <img src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="Ashish" className="profile-image h-32 w-32 md:h-48 md:w-48 rounded-full object-cover border-4 border-white object-[center_25%]" loading="lazy" />
         </div>
-        <div className="flex space-x-2 animate-scale-in" style={{
+        <div className="flex flex-col space-y-2 animate-scale-in" style={{
         animationDelay: "0.5s"
       }}>
           <Badge className="bg-primary text-white text-md px-3 py-1 rounded-full shadow-lg">
             Beginner
           </Badge>
           <Badge className="bg-primary text-white text-md px-3 py-1 rounded-full shadow-lg">
-            Right Handed
+            Playing Hand: Right
           </Badge>
         </div>
       </div>
