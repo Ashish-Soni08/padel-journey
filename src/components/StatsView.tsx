@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -214,7 +215,7 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
                 <Bar 
                   name="Match Count" 
                   dataKey="matches" 
-                  fill="var(--primary)" 
+                  fill="#0088FE" 
                   radius={[4, 4, 0, 0]}
                   animationDuration={1500}
                   barSize={30}
