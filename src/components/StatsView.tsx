@@ -20,10 +20,10 @@ const matchData = [
   { month: 'Jun', matches: 4 },
 ];
 
-// Updated to show 5 training matches with no wins/losses
+// Updated to show 1 win, 1 loss, and 5 training sessions
 const resultData = [
-  { name: 'Wins', value: 0 },
-  { name: 'Losses', value: 0 },
+  { name: 'Wins', value: 1 },
+  { name: 'Losses', value: 1 },
   { name: 'Training', value: 5 }
 ];
 
@@ -34,14 +34,14 @@ const recentMatches = [
     date: '2023-06-25',
     partners: ['Sarah', 'John'],
     type: 'Tournament',
-    result: 'Training'
+    result: 'Win'
   },
   { 
     id: 2, 
     date: '2023-06-18',
     partners: ['David'],
     type: 'Match',
-    result: 'Training'
+    result: 'Loss'
   },
   { 
     id: 3, 
@@ -83,13 +83,13 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <StatCard
           icon={<Award className="h-6 w-6" />}
           title="Win Rate"
-          value="0%"
-          description="0 wins, 0 losses, 5 training"
+          value="50%"
+          description="1 win, 1 loss, 5 training"
         />
         <StatCard
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
-          value="5"
+          value="7"
           description="Since January 2023"
         />
         <StatCard
