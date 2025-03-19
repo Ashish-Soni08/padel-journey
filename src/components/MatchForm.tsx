@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -15,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { addMatch } from "@/services/matchDatabase";
 
 const formSchema = z.object({
   date: z.date({
@@ -95,7 +95,20 @@ const MatchForm: React.FC<MatchFormProps> = ({
     setIsSubmitting(true);
     try {
       await new Promise(r => setTimeout(r, 800));
-      console.log("Match data:", data);
+      
+      // Save match to database
+      addMatch({
+        date: data.date,
+        matchType: data.matchType,
+        matchFormat: data.matchFormat,
+        player1: data.player1,
+        player2: data.player2,
+        player3: data.player3,
+        result: data.result,
+        duration: data.duration,
+        venue: data.venue,
+        notes: data.notes
+      });
 
       // Format player names for display
       const players = [data.player1];

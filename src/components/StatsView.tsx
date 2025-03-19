@@ -1,75 +1,70 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Award, Clock, Calendar, Activity, Users, Percent } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getAllMatches, getMatchStats, MatchData } from "@/services/matchDatabase";
+import { format } from "date-fns";
 
 interface StatsViewProps {
   className?: string;
 }
 
-// Sample data - would be replaced with real data in a production app
-const matchData = [
-  { month: 'Jan', matches: 1 },
-  { month: 'Feb', matches: 1 },
-  { month: 'Mar', matches: 3 },
-  { month: 'Apr', matches: 0 },
-  { month: 'May', matches: 0 },
-  { month: 'Jun', matches: 0 },
-];
-
-// Updated to show 0 wins, 0 losses, and 5 training sessions
-const resultData = [
-  { name: 'Wins', value: 0 },
-  { name: 'Losses', value: 0 },
-  { name: 'Training', value: 5 }
-];
-
-// Updated last 5 matches with the new partner data
-const recentMatches = [
-  { 
-    id: 1, 
-    date: '2023-03-15',
-    partners: ['Johanna', 'Anoosha', 'Renna'],
-    type: 'Training',
-    result: 'Training'
-  },
-  { 
-    id: 2, 
-    date: '2023-03-13',
-    partners: ['Jannes', 'Carolin', 'Jonathan'],
-    type: 'Training',
-    result: 'Training'
-  },
-  { 
-    id: 3, 
-    date: '2023-03-09',
-    partners: ['Kerstin', 'Annie', 'Bella'],
-    type: 'Training',
-    result: 'Training'
-  },
-  { 
-    id: 4, 
-    date: '2023-02-17',
-    partners: ['Stephan', 'John', 'Christian'],
-    type: 'Training',
-    result: 'Training'
-  },
-  { 
-    id: 5, 
-    date: '2023-01-26',
-    partners: ['Manoj'],
-    type: 'Training',
-    result: 'Training'
-  }
-];
-
-// Updated colors to include training (blue)
+// Colors for the charts
 const COLORS = ['#0088FE', '#FF8042', '#8B5CF6'];
 
+// Month abbreviations
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 const StatsView: React.FC<StatsViewProps> = ({ className }) => {
+  const [matches, setMatches] = useState<MatchData[]>([]);
+  const [stats, setStats] = useState({
+    totalMatches: 0,
+    totalDuration: 0,
+    resultCounts: { win: 0, loss: 0, training: 0 },
+    monthlyMatches: Array(12).fill(0)
+  });
+  const [matchData, setMatchData] = useState<{ month: string; matches: number }[]>([]);
+  const [resultData, setResultData] = useState<{ name: string; value: number }[]>([]);
+
+  // Load data from database
+  useEffect(() => {
+    const loadData = () => {
+      const allMatches = getAllMatches();
+      const matchStats = getMatchStats();
+      
+      setMatches(allMatches);
+      setStats(matchStats);
+      
+      // Format data for charts
+      const monthData = matchStats.monthlyMatches
+        .map((count, index) => ({
+          month: MONTHS[index],
+          matches: count
+        }));
+      
+      const resultData = [
+        { name: 'Wins', value: matchStats.resultCounts.win },
+        { name: 'Losses', value: matchStats.resultCounts.loss },
+        { name: 'Training', value: matchStats.resultCounts.training }
+      ];
+      
+      setMatchData(monthData);
+      setResultData(resultData);
+    };
+    
+    loadData();
+    
+    // Add event listener for storage changes if multiple tabs are open
+    window.addEventListener('storage', loadData);
+    
+    return () => {
+      window.removeEventListener('storage', loadData);
+    };
+  }, []);
+
   // Helper function to format partners list
   const formatPartners = (partners: string[]) => {
     if (partners.length === 0) return "";
@@ -77,7 +72,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
     return partners.join(", ");
   };
 
-  // Custom label renderer that improves spacing and handles overlapping
+  // Custom label renderer for pie chart
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
     // If the value is 0, don't render a label
     if (resultData[index].value === 0) return null;
@@ -103,26 +98,41 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
     );
   };
 
+  // Calculate win rate
+  const winRate = stats.resultCounts.win + stats.resultCounts.loss > 0
+    ? Math.round((stats.resultCounts.win / (stats.resultCounts.win + stats.resultCounts.loss)) * 100)
+    : 0;
+
+  // Format total duration
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours} ${hours === 1 ? 'hr' : 'hrs'}${mins > 0 ? ` ${mins} min` : ''}`;
+  };
+
+  // Get recent matches (top 5)
+  const recentMatches = matches.slice(0, 5);
+
   return (
     <div className={cn("space-y-8 animate-fade-up", className)}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatCard
           icon={<Award className="h-6 w-6" />}
           title="Win Rate"
-          value="0%"
-          description="0 wins, 0 losses, 5 training"
+          value={`${winRate}%`}
+          description={`${stats.resultCounts.win} wins, ${stats.resultCounts.loss} losses, ${stats.resultCounts.training} training`}
         />
         <StatCard
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
-          value="5"
-          description="Since January 2025"
+          value={stats.totalMatches.toString()}
+          description={`Since January 2023`}
         />
         <StatCard
           icon={<Clock className="h-6 w-6" />}
           title="Total Duration"
-          value="6 hrs"
-          description="360 minutes played"
+          value={formatDuration(stats.totalDuration)}
+          description={`${stats.totalDuration} minutes played`}
         />
       </div>
 
@@ -131,7 +141,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Activity className="h-5 w-5 mr-2" />
-              Court Time by Month - 2025 Season
+              Court Time by Month - {new Date().getFullYear()} Season
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px] w-full">
@@ -212,31 +222,38 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
         <CardContent>
           <h3 className="font-medium mb-4">Last 5 Matches</h3>
           <div className="space-y-4">
-            {recentMatches.map((match) => (
-              <div key={match.id} className="flex items-center p-3 border rounded-lg">
-                <div className="flex items-center flex-1">
-                  <Avatar className="h-12 w-12 mr-4">
-                    <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="User" />
-                    <AvatarFallback>AS</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <span className="font-medium">You with {formatPartners(match.partners)}</span>
-                    <div className="text-sm text-muted-foreground">
-                      {match.date}
-                    </div>
-                    <div className={`text-sm mt-1 font-medium ${
-                      match.result === 'Win' 
-                        ? 'text-green-500' 
-                        : match.result === 'Loss' 
-                          ? 'text-red-500' 
-                          : 'text-blue-500'
-                    }`}>
-                      {match.result}
+            {recentMatches.map((match) => {
+              const partners = [];
+              if (match.player1) partners.push(match.player1);
+              if (match.player2) partners.push(match.player2);
+              if (match.player3) partners.push(match.player3);
+              
+              return (
+                <div key={match.id} className="flex items-center p-3 border rounded-lg">
+                  <div className="flex items-center flex-1">
+                    <Avatar className="h-12 w-12 mr-4">
+                      <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="User" />
+                      <AvatarFallback>AS</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <span className="font-medium">You with {formatPartners(partners)}</span>
+                      <div className="text-sm text-muted-foreground">
+                        {format(match.date, 'yyyy-MM-dd')}
+                      </div>
+                      <div className={`text-sm mt-1 font-medium ${
+                        match.result === 'win' 
+                          ? 'text-green-500' 
+                          : match.result === 'loss' 
+                            ? 'text-red-500' 
+                            : 'text-blue-500'
+                      }`}>
+                        {match.result === 'win' ? 'Win' : match.result === 'loss' ? 'Loss' : 'Training'}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </CardContent>
       </Card>
