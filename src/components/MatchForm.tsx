@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -33,7 +32,6 @@ const formSchema = z.object({
   duration: z.string()
     .min(1, { message: "Please enter the match duration" })
     .refine((val) => {
-      // Extract numeric value (assuming format like "60 min", "90 minutes", etc.)
       const numericValue = parseInt(val.replace(/[^0-9]/g, ''));
       return !isNaN(numericValue) && numericValue >= 60;
     }, { message: "Duration must be at least 60 minutes" }),
@@ -42,11 +40,9 @@ const formSchema = z.object({
   }),
   notes: z.string().optional()
 }).refine(data => {
-  // If matchType is training, result field should not be required
   if (data.matchType === "training") {
     return true;
   }
-  // If matchType is competitive, result field is required
   return !!data.result;
 }, {
   message: "Result is required for competitive matches",
@@ -79,15 +75,12 @@ const MatchForm: React.FC<MatchFormProps> = ({
     }
   });
 
-  // Get the current value of matchType
   const watchMatchType = form.watch("matchType");
 
-  // Reset result field when matchType changes to training
   useEffect(() => {
     if (watchMatchType === "training") {
       form.setValue("result", undefined);
     } else if (!form.getValues("result")) {
-      // Set default result for competitive if not set
       form.setValue("result", "win");
     }
   }, [watchMatchType, form]);
@@ -95,22 +88,18 @@ const MatchForm: React.FC<MatchFormProps> = ({
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      // Simulate API call delay
       await new Promise(r => setTimeout(r, 800));
       console.log("Match data:", data);
 
-      // Show success toast
       toast({
         title: "Match recorded!",
         description: `Your ${data.matchType === "training" ? "training session" : data.result} at ${data.venue} has been saved.`
       });
 
-      // Call the callback if provided
       if (onMatchAdded) {
         onMatchAdded(data);
       }
 
-      // Reset form
       form.reset({
         date: new Date(),
         matchType: "training",
@@ -143,7 +132,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Date Field - with updated placeholder */}
               <FormField control={form.control} name="date" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -164,7 +152,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Match Type Field - with updated placeholder */}
               <FormField control={form.control} name="matchType" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -183,7 +170,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
               
-              {/* Match Format Field - with updated placeholder */}
               <FormField control={form.control} name="matchFormat" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -202,7 +188,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Result Field - only shown for competitive matches with updated placeholder */}
               {watchMatchType === "competitive" && <FormField control={form.control} name="result" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -222,7 +207,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <FormMessage />
                     </FormItem>} />}
               
-              {/* Players Field - with updated placeholder */}
               <FormField control={form.control} name="players" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -233,7 +217,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
               
-              {/* Duration Field - with updated placeholder */}
               <FormField control={form.control} name="duration" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5">
@@ -245,13 +228,9 @@ const MatchForm: React.FC<MatchFormProps> = ({
                         {...field} 
                       />
                     </FormControl>
-                    <FormDescription>
-                      Matches must be at least 60 minutes
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>} />
               
-              {/* Venue Field - with updated placeholder */}
               <FormField control={form.control} name="venue" render={({
               field
             }) => <FormItem className="flex flex-col space-y-1.5" style={{
@@ -259,13 +238,12 @@ const MatchForm: React.FC<MatchFormProps> = ({
             }}>
                     <FormLabel>Venue</FormLabel>
                     <FormControl>
-                      <Input className="h-10" placeholder="Club name and location" {...field} />
+                      <Input className="h-10" placeholder="Club name and location e.g. PadelCity Leipzig" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
             </div>
             
-            {/* Notes Field - with updated placeholder */}
             <FormField control={form.control} name="notes" render={({
             field
           }) => <FormItem>
@@ -273,9 +251,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
                   <FormControl>
                     <Textarea placeholder="Record thoughts on improvements or areas to work on" className="min-h-[100px]" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Record your thoughts, improvements or areas to work on
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>} />
             
@@ -289,3 +264,4 @@ const MatchForm: React.FC<MatchFormProps> = ({
 };
 
 export default MatchForm;
+
