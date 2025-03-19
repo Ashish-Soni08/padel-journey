@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -105,7 +104,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Activity className="h-5 w-5 mr-2" />
-              Matches by Month
+              Court Time by Month - 2025 Season
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px] w-full">
