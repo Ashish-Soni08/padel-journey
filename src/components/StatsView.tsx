@@ -77,6 +77,32 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
     return partners.join(", ");
   };
 
+  // Custom label renderer that improves spacing and handles overlapping
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
+    // If the value is 0, don't render a label
+    if (resultData[index].value === 0) return null;
+    
+    const RADIAN = Math.PI / 180;
+    // Increase the distance from the center for better separation
+    const radius = outerRadius * 1.2;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill={COLORS[index % COLORS.length]}
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        fontSize="12"
+        fontWeight="bold"
+      >
+        {`${name}: ${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
   return (
     <div className={cn("space-y-8 animate-fade-up", className)}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -155,7 +181,7 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
                   paddingAngle={5}
                   dataKey="value"
                   animationDuration={1500}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={renderCustomizedLabel}
                   labelLine={false}
                 >
                   {resultData.map((entry, index) => (
