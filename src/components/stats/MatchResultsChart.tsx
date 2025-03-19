@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Percent } from "lucide-react";
 
-// Colors for the charts
+// Colors for the charts - optimized for dark mode
 const COLORS = ['#0088FE', '#FF8042', '#8B5CF6'];
 
 interface MatchResultsChartProps {
