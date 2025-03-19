@@ -4,9 +4,12 @@
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
+// Define the Attribute type that next-themes expects
+type Attribute = "class" | "data-theme" | "data-mode";
+
 type ThemeProviderProps = {
   children: React.ReactNode;
-  attribute?: string;
+  attribute?: Attribute | Attribute[];
   defaultTheme?: string;
   enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
