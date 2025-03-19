@@ -19,7 +19,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ className }) => {
           <img 
             src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" 
             alt="Ashish" 
-            className="profile-image h-32 w-32 md:h-48 md:w-48 rounded-full object-cover border-4 border-white object-[center_40%]"
+            className="profile-image h-32 w-32 md:h-48 md:w-48 rounded-full object-cover border-4 border-white object-[center_30%]"
             loading="lazy"
           />
         </div>
