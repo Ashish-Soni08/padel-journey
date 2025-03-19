@@ -24,8 +24,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         animationDelay: "0.5s"
       }}>
           <Flex align="center" gap="2">
-            <Badge size="1" color="indigo">Beginner</Badge>
-            <Badge size="2" color="indigo">New</Badge>
+            <Badge size="3" color="indigo">Beginner</Badge>
             <Badge size="3" color="indigo">Right-handed</Badge>
           </Flex>
         </div>
