@@ -23,7 +23,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <div className="animate-scale-in" style={{
         animationDelay: "0.5s"
       }}>
-          <Flex gap="2">
+          <Flex gap="3">
             <Badge color="blue">Beginner</Badge>
             <Badge color="blue">Right-handed</Badge>
           </Flex>
