@@ -32,8 +32,9 @@ const badgeVariants = cva(
   }
 )
 
+// Fixed type issue by removing the HTML color attribute from HTMLAttributes
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, color, ...props }: BadgeProps) {
