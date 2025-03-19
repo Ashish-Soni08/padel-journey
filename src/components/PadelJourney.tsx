@@ -19,7 +19,7 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
 }) => {
   return (
     <div className={cn("container px-4 py-8 mx-auto max-w-6xl relative", className)}>
-      <div className="absolute top-4 right-0 z-10">
+      <div className="absolute top-4 left-0 z-10">
         <ThemeToggle />
       </div>
       
