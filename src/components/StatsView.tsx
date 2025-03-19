@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid, Legend } from 'recharts';
 import { Award, Clock, Calendar, Activity, Users, Percent, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MatchData } from "@/services/matchDatabase";
@@ -10,17 +9,13 @@ import { getAllMatchesFromSupabase, getMatchStatsFromSupabase, subscribeToMatche
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 
-interface StatsViewProps {
-  className?: string;
-}
-
 // Colors for the charts
 const COLORS = ['#0088FE', '#FF8042', '#8B5CF6'];
 
 // Month abbreviations
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const StatsView: React.FC<StatsViewProps> = ({ className }) => {
+const StatsView: React.FC<{ className?: string }> = ({ className }) => {
   const [matches, setMatches] = useState<MatchData[]>([]);
   const [stats, setStats] = useState({
     totalMatches: 0,
@@ -102,6 +97,18 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
     if (partners.length === 0) return "";
     if (partners.length === 1) return partners[0];
     return partners.join(", ");
+  };
+
+  // Custom bar chart tooltip
+  const CustomBarTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-background border rounded-md shadow-md p-2 text-sm">
+          <p className="font-medium">{`${label}: ${payload[0].value} matches`}</p>
+        </div>
+      );
+    }
+    return null;
   };
 
   // Custom label renderer for pie chart
@@ -191,21 +198,27 @@ const StatsView: React.FC<StatsViewProps> = ({ className }) => {
                 data={matchData}
                 margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
               >
-                <XAxis dataKey="month" />
-                <YAxis allowDecimals={false} />
-                <Tooltip 
-                  contentStyle={{ 
-                    borderRadius: '8px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    border: 'none',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                  }}
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(150, 150, 150, 0.1)" />
+                <XAxis 
+                  dataKey="month" 
+                  tick={{ fill: 'var(--foreground)' }}
+                  axisLine={{ stroke: 'var(--border)' }}
                 />
+                <YAxis 
+                  allowDecimals={false} 
+                  tick={{ fill: 'var(--foreground)' }}
+                  axisLine={{ stroke: 'var(--border)' }}
+                />
+                <Tooltip content={<CustomBarTooltip />} />
+                <Legend />
                 <Bar 
+                  name="Match Count" 
                   dataKey="matches" 
-                  fill="#0088FE" 
+                  fill="var(--primary)" 
                   radius={[4, 4, 0, 0]}
                   animationDuration={1500}
+                  barSize={30}
+                  className="hover:opacity-80 transition-opacity"
                 />
               </BarChart>
             </ResponsiveContainer>

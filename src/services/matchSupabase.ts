@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { MatchData } from "./matchDatabase";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -107,10 +106,10 @@ export const subscribeToMatches = (callback: (matches: MatchData[]) => void): Re
 export const getMatchStatsFromSupabase = async () => {
   const matches = await getAllMatchesFromSupabase();
   
-  // Initialize statistics object
+  // Initialize statistics object with a fixed total duration of 360 minutes
   const stats = {
     totalMatches: matches.length,
-    totalDuration: 0,
+    totalDuration: 360, // Set to 360 as requested
     resultCounts: {
       win: 0,
       loss: 0,
@@ -121,9 +120,7 @@ export const getMatchStatsFromSupabase = async () => {
   
   // Process each match to calculate statistics
   matches.forEach(match => {
-    // Add duration
-    const durationValue = parseInt(match.duration);
-    stats.totalDuration += isNaN(durationValue) ? 0 : durationValue;
+    // Skip the duration calculation since we're using a fixed value
     
     // Count results
     if (match.result === 'win') stats.resultCounts.win++;
