@@ -25,7 +25,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <Badge className="bg-primary text-white text-md px-3 py-1 rounded-full shadow-lg">
             Beginner
           </Badge>
-          <Badge className="bg-secondary text-secondary-foreground text-md px-3 py-1 rounded-full shadow-lg">
+          <Badge className="bg-primary text-white text-md px-3 py-1 rounded-full shadow-lg">
             Right Handed
           </Badge>
         </div>
