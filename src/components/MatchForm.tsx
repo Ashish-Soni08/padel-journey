@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ const formSchema = z.object({
   players: z.string().min(2, {
     message: "Please enter players' names"
   }),
-  result: z.enum(["win", "loss", "training"]),
+  result: z.enum(["win", "loss", "training"]).optional(),
   duration: z.string().min(1, {
     message: "Please enter the match duration"
   }),
@@ -37,6 +37,16 @@ const formSchema = z.object({
     message: "Please enter the venue name"
   }),
   notes: z.string().optional()
+}).refine((data) => {
+  // If matchType is competitive, result field should not be required
+  if (data.matchType === "competitive") {
+    return true;
+  }
+  // If matchType is training, result field is required
+  return !!data.result;
+}, {
+  message: "Result is required for training matches",
+  path: ["result"]
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -66,6 +76,19 @@ const MatchForm: React.FC<MatchFormProps> = ({
     }
   });
 
+  // Get the current value of matchType
+  const watchMatchType = form.watch("matchType");
+  
+  // Reset result field when matchType changes to competitive
+  useEffect(() => {
+    if (watchMatchType === "competitive") {
+      form.setValue("result", undefined);
+    } else if (!form.getValues("result")) {
+      // Set default result for training if not set
+      form.setValue("result", "win");
+    }
+  }, [watchMatchType, form]);
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
@@ -76,7 +99,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       // Show success toast
       toast({
         title: "Match recorded!",
-        description: `Your ${data.result} at ${data.venue} has been saved.`
+        description: `Your ${data.matchType === "competitive" ? "competitive match" : data.result} at ${data.venue} has been saved.`
       });
 
       // Call the callback if provided
@@ -176,25 +199,27 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Result Field - with improved height consistency */}
-              <FormField control={form.control} name="result" render={({
-              field
-            }) => <FormItem className="flex flex-col space-y-1.5">
-                    <FormLabel>Result</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="h-10">
-                          <SelectValue placeholder="Select result" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="win">Win</SelectItem>
-                        <SelectItem value="loss">Loss</SelectItem>
-                        <SelectItem value="training">Training</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>} />
+              {/* Result Field - only shown for training matches */}
+              {watchMatchType === "training" && (
+                <FormField control={form.control} name="result" render={({
+                field
+              }) => <FormItem className="flex flex-col space-y-1.5">
+                      <FormLabel>Result</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="h-10">
+                            <SelectValue placeholder="Select result" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="win">Win</SelectItem>
+                          <SelectItem value="loss">Loss</SelectItem>
+                          <SelectItem value="training">Training</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>} />
+              )}
               
               {/* Players Field - with improved height consistency */}
               <FormField control={form.control} name="players" render={({
