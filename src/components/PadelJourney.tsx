@@ -6,6 +6,7 @@ import ProfileHeader from "./ProfileHeader";
 import MatchForm from "./MatchForm";
 import StatsView from "./StatsView";
 import { Home, BarChart2 } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface PadelJourneyProps {
   className?: string;
@@ -17,7 +18,11 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
   defaultTab = "home"
 }) => {
   return (
-    <div className={cn("container px-4 py-8 mx-auto max-w-6xl", className)}>
+    <div className={cn("container px-4 py-8 mx-auto max-w-6xl relative", className)}>
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      
       <ProfileHeader />
       
       <div className="mt-10 animate-fade-up" style={{ animationDelay: "0.4s" }}>
