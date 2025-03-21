@@ -58,7 +58,7 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
             <Bar 
               name="Match Count" 
               dataKey="matches" 
-              fill="hsl(var(--primary))" 
+              fill="hsl(var(--chart-1))" 
               radius={[4, 4, 0, 0]}
               animationDuration={1500}
               barSize={30}

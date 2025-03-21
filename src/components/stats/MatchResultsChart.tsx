@@ -31,11 +31,12 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
       <text 
         x={x} 
         y={y} 
-        fill={COLORS[index % COLORS.length]}
+        fill="var(--foreground)"
         textAnchor={x > cx ? 'start' : 'end'} 
         dominantBaseline="central"
         fontSize="13"
         fontWeight="600"
+        style={{ filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.25))' }}
       >
         {`${name}: ${(percent * 100).toFixed(0)}%`}
       </text>
@@ -87,14 +88,14 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
               animationDuration={1500}
               label={renderCustomizedLabel}
               labelLine={false}
-              strokeWidth={1}
+              strokeWidth={2}
               stroke="var(--background)"
             >
               {dataWithPercent.map((entry, index) => (
                 <Cell 
                   key={`cell-${index}`} 
                   fill={COLORS[index % COLORS.length]} 
-                  className="drop-shadow-sm hover:opacity-90 transition-opacity"
+                  className="drop-shadow-md hover:opacity-90 transition-opacity"
                 />
               ))}
             </Pie>

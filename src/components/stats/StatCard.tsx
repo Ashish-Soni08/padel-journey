@@ -12,13 +12,13 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ icon, title, value, description }) => {
   return (
     <Card className="glass-panel card-hover animate-fade-up overflow-hidden relative" style={{ animationDelay: "0.1s" }}>
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50 dark:opacity-30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-50 dark:opacity-30" />
       <CardContent className="pt-6 relative z-10">
         <div className="flex items-center justify-between mb-4">
-          <div className="p-3 bg-primary/15 rounded-full text-primary dark:text-primary-foreground">
+          <div className="p-3 bg-primary/20 rounded-full text-primary dark:text-primary">
             {icon}
           </div>
-          <span className="text-3xl font-bold text-primary dark:text-primary-foreground">{value}</span>
+          <span className="text-3xl font-bold text-primary dark:text-primary">{value}</span>
         </div>
         <div className="mt-2">
           <h3 className="font-semibold text-lg mb-1">{title}</h3>
