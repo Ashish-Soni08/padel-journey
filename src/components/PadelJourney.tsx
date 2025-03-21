@@ -17,23 +17,23 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
   defaultTab = "home"
 }) => {
   return (
-    <div className={cn("container px-4 py-8 mx-auto max-w-6xl relative", className)}>
+    <div className={cn("container px-4 py-6 pb-12 mx-auto max-w-6xl relative", className)}>
       <ProfileHeader />
       
-      <div className="mt-3 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+      <div className="mt-6 animate-fade-up" style={{ animationDelay: "0.4s" }}>
         <Tabs defaultValue={defaultTab} className="w-full">
-          <div className="flex justify-center mb-2">
-            <TabsList className="grid grid-cols-2 w-full max-w-md">
+          <div className="flex justify-center mb-4">
+            <TabsList className="grid grid-cols-2 w-full max-w-md bg-background/50 backdrop-blur-sm shadow-md">
               <TabsTrigger 
                 value="home"
-                className="flex items-center space-x-2 tab-transition"
+                className="flex items-center space-x-2 tab-transition data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
               >
                 <Home className="h-4 w-4" />
                 <span>Home</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="stats"
-                className="flex items-center space-x-2 tab-transition"
+                className="flex items-center space-x-2 tab-transition data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
               >
                 <BarChart2 className="h-4 w-4" />
                 <span>Statistics</span>
@@ -43,14 +43,14 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
           
           <TabsContent 
             value="home" 
-            className="tab-transition mt-4"
+            className="tab-transition mt-6"
           >
             <MatchForm />
           </TabsContent>
           
           <TabsContent 
             value="stats" 
-            className="tab-transition mt-4"
+            className="tab-transition mt-6"
           >
             <StatsView />
           </TabsContent>

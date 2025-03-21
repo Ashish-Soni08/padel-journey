@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Percent } from "lucide-react";
 
-// Colors from the theme variables - these will respect the current theme
+// Colors that will respect the current theme from our CSS variables
 const COLORS = [
   'hsl(var(--chart-1))',
   'hsl(var(--chart-3))',
@@ -23,7 +23,7 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
     
     const RADIAN = Math.PI / 180;
     // Increase the distance from the center for better separation
-    const radius = outerRadius * 1.2;
+    const radius = outerRadius * 1.3;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     
@@ -34,8 +34,8 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
         fill={COLORS[index % COLORS.length]}
         textAnchor={x > cx ? 'start' : 'end'} 
         dominantBaseline="central"
-        fontSize="12"
-        fontWeight="bold"
+        fontSize="13"
+        fontWeight="600"
       >
         {`${name}: ${(percent * 100).toFixed(0)}%`}
       </text>
@@ -47,8 +47,8 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
     if (active && payload && payload.length) {
       const data = payload[0];
       return (
-        <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
-          <p className="font-semibold text-sm">{`${data.name}: ${data.value}`}</p>
+        <div className="glass-panel px-3 py-2 text-sm">
+          <p className="font-semibold">{`${data.name}: ${data.value}`}</p>
           <p className="text-xs text-muted-foreground">{`${(data.payload.percent * 100).toFixed(1)}% of total`}</p>
         </div>
       );
@@ -64,10 +64,11 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
   }));
 
   return (
-    <Card className="glass-panel col-span-1 animate-fade-up" style={{ animationDelay: "0.3s" }}>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <Percent className="h-5 w-5 mr-2" />
+    <Card className="glass-panel card-hover col-span-1 animate-fade-up overflow-hidden" style={{ animationDelay: "0.3s" }}>
+      <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent" />
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center text-xl font-semibold">
+          <Percent className="h-5 w-5 mr-2 text-primary" />
           Match Results
         </CardTitle>
       </CardHeader>
@@ -78,7 +79,7 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
               data={dataWithPercent}
               cx="50%"
               cy="50%"
-              innerRadius={60}
+              innerRadius={65}
               outerRadius={100}
               fill="hsl(var(--primary))"
               paddingAngle={5}
@@ -86,9 +87,15 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
               animationDuration={1500}
               label={renderCustomizedLabel}
               labelLine={false}
+              strokeWidth={1}
+              stroke="var(--background)"
             >
               {dataWithPercent.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={COLORS[index % COLORS.length]} 
+                  className="drop-shadow-sm hover:opacity-90 transition-opacity"
+                />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
