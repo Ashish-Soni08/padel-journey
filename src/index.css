@@ -25,11 +25,13 @@
     --input: 214 32% 91%;
     --ring: 221 83% 53%;
     --radius: 1rem;
-    --chart-1: 221 83% 53%;
-    --chart-2: 25 95% 53%;
-    --chart-3: 160 84% 39%;
-    --chart-4: 262 83% 58%;
-    --chart-5: 340 82% 52%;
+    
+    /* Enhanced chart colors for better visibility */
+    --chart-1: 201 89% 48%;  /* Ocean Blue */
+    --chart-2: 25 95% 53%;   /* Bright Orange */
+    --chart-3: 262 83% 58%;  /* Vivid Purple */
+    --chart-4: 340 82% 52%;  /* Bright Pink */
+    --chart-5: 142 72% 45%;  /* Green */
   }
 
   .dark {
@@ -97,15 +99,22 @@
   transition: opacity 300ms;
 }
 
-/* Chart styles */
+/* Enhanced Chart styles */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
   stroke: var(--border);
-  stroke-opacity: 0.6;
+  stroke-opacity: 0.8;
+  stroke-width: 1;
+}
+
+.recharts-cartesian-axis-line {
+  stroke: var(--border);
+  stroke-width: 1.5;
 }
 
 .recharts-tooltip-wrapper {
   filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.15));
+  z-index: 10;
 }
 
 .recharts-pie-label-text {
@@ -114,3 +123,19 @@
   filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.1));
 }
 
+.recharts-legend-item {
+  font-weight: 500 !important;
+}
+
+.recharts-legend-item-text {
+  color: var(--foreground) !important;
+}
+
+.recharts-label {
+  fill: var(--foreground);
+  font-weight: 500;
+}
+
+.recharts-text {
+  fill: var(--foreground) !important;
+}

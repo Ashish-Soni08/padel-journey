@@ -7,6 +7,7 @@ import StatCard from "@/components/stats/StatCard";
 import MonthlyMatchesChart from "@/components/stats/MonthlyMatchesChart";
 import MatchResultsChart from "@/components/stats/MatchResultsChart";
 import RecentMatchesList from "@/components/stats/RecentMatchesList";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const StatsView: React.FC<{ className?: string }> = ({ className }) => {
   const { 
@@ -50,10 +51,17 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <MonthlyMatchesChart matchData={chartData.matchData} />
-        <MatchResultsChart resultData={chartData.resultData} />
-      </div>
+      <Card className="shadow-md border-border">
+        <CardHeader>
+          <CardTitle>Performance Analytics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <MonthlyMatchesChart matchData={chartData.matchData} />
+            <MatchResultsChart resultData={chartData.resultData} />
+          </div>
+        </CardContent>
+      </Card>
 
       <RecentMatchesList matches={recentMatches} />
     </div>
