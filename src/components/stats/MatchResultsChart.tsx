@@ -99,7 +99,7 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
                 if (active && payload && payload.length) {
                   const data = payload[0];
                   const total = resultData.reduce((sum, item) => sum + item.value, 0);
-                  const percent = total > 0 ? (data.value / total) * 100 : 0;
+                  const percent = total > 0 ? ((data.value as number) / total) * 100 : 0;
                   
                   return (
                     <div className="bg-card border border-border p-3 rounded-lg shadow-lg">
