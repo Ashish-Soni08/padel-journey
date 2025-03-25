@@ -18,7 +18,20 @@ export interface MatchData {
 const initialMatches: MatchData[] = [
   { 
     id: "1",
-    date: new Date("2023-03-15"),
+    date: new Date("2025-03-24"),
+    matchType: "training",
+    matchFormat: "2v2",
+    player1: "Rishi",
+    player2: "Nik",
+    player3: "Alberto",
+    result: "training",
+    duration: "60",
+    venue: "PadelCity Leipzig",
+    notes: "New training session with different partners"
+  },
+  { 
+    id: "2",
+    date: new Date("2025-03-15"),
     matchType: "training",
     matchFormat: "2v2",
     player1: "Johanna",
@@ -30,8 +43,8 @@ const initialMatches: MatchData[] = [
     notes: "Good session focusing on backhand shots"
   },
   { 
-    id: "2",
-    date: new Date("2023-03-13"),
+    id: "3",
+    date: new Date("2025-03-13"),
     matchType: "training",
     matchFormat: "2v2",
     player1: "Jannes",
@@ -43,8 +56,8 @@ const initialMatches: MatchData[] = [
     notes: "Worked on serves and returns"
   },
   { 
-    id: "3",
-    date: new Date("2023-03-09"),
+    id: "4",
+    date: new Date("2025-03-09"),
     matchType: "training",
     matchFormat: "2v2",
     player1: "Kerstin",
@@ -56,8 +69,8 @@ const initialMatches: MatchData[] = [
     notes: "Focused on positioning and strategy"
   },
   { 
-    id: "4",
-    date: new Date("2023-02-17"),
+    id: "5",
+    date: new Date("2025-02-17"),
     matchType: "training",
     matchFormat: "2v2",
     player1: "Stephan",
@@ -69,8 +82,8 @@ const initialMatches: MatchData[] = [
     notes: "Practice match with new partners"
   },
   { 
-    id: "5",
-    date: new Date("2023-01-26"),
+    id: "6",
+    date: new Date("2024-11-26"),
     matchType: "training",
     matchFormat: "1v1",
     player1: "Manoj",
