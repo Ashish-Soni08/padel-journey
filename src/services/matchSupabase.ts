@@ -106,10 +106,10 @@ export const subscribeToMatches = (callback: (matches: MatchData[]) => void): Re
 export const getMatchStatsFromSupabase = async () => {
   const matches = await getAllMatchesFromSupabase();
   
-  // Initialize statistics object with a fixed total duration of 360 minutes
+  // Initialize statistics object with fixed values as requested
   const stats = {
-    totalMatches: matches.length,
-    totalDuration: 360, // Set to 360 as requested
+    totalMatches: 6, // Fixed to 6 matches played
+    totalDuration: 480, // Fixed to 8 hours (480 minutes)
     resultCounts: {
       win: 0,
       loss: 0,
@@ -118,10 +118,8 @@ export const getMatchStatsFromSupabase = async () => {
     monthlyMatches: Array(12).fill(0) as number[]
   };
   
-  // Process each match to calculate statistics
+  // Process each match to calculate result counts and monthly distribution
   matches.forEach(match => {
-    // Skip the duration calculation since we're using a fixed value
-    
     // Count results
     if (match.result === 'win') stats.resultCounts.win++;
     else if (match.result === 'loss') stats.resultCounts.loss++;

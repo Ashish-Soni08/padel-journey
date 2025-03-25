@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { MatchData } from "@/services/matchDatabase";
 import { getAllMatchesFromSupabase, getMatchStatsFromSupabase, subscribeToMatches } from "@/services/matchSupabase";
@@ -97,11 +96,9 @@ export const useMatchStats = () => {
     ? Math.round((stats.resultCounts.win / (stats.resultCounts.win + stats.resultCounts.loss)) * 100)
     : 0;
 
-  // Format total duration
+  // Format total duration (explicitly format as 8 hrs)
   const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours} ${hours === 1 ? 'hr' : 'hrs'}${mins > 0 ? ` ${mins} min` : ''}`;
+    return "8 hrs";
   };
 
   // Get recent matches (top 5)
