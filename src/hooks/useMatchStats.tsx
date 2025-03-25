@@ -96,11 +96,18 @@ export const useMatchStats = () => {
     ? Math.round((stats.resultCounts.win / (stats.resultCounts.win + stats.resultCounts.loss)) * 100)
     : 0;
 
-  // Format total duration
+  // Format total duration - corrected to handle numeric minutes properly
   const formatDuration = (minutes: number) => {
+    if (isNaN(minutes) || minutes <= 0) return "0 mins";
+    
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    return hours > 0 ? `${hours} hrs${mins > 0 ? ` ${mins} mins` : ''}` : `${mins} mins`;
+    
+    if (hours > 0) {
+      return `${hours} ${hours === 1 ? 'hr' : 'hrs'}${mins > 0 ? ` ${mins} min${mins === 1 ? '' : 's'}` : ''}`;
+    } else {
+      return `${mins} min${mins === 1 ? '' : 's'}`;
+    }
   };
 
   // Get recent matches (top 5)
