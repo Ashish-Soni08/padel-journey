@@ -13,7 +13,7 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
   const CustomBarTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-background border rounded-md shadow-md p-2 text-sm">
+        <div className="bg-card border rounded-md shadow-md p-3 text-sm">
           <p className="font-medium">{`${label}: ${payload[0].value} matches`}</p>
         </div>
       );
@@ -22,10 +22,10 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
   };
 
   return (
-    <Card className="glass-panel col-span-1 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+    <Card className="glass-panel col-span-1 animate-fade-up shadow-md" style={{ animationDelay: "0.2s" }}>
       <CardHeader>
         <CardTitle className="flex items-center">
-          <Activity className="h-5 w-5 mr-2" />
+          <Activity className="h-5 w-5 mr-2 text-primary" />
           Court Time by Month - {new Date().getFullYear()} Season
         </CardTitle>
       </CardHeader>
@@ -33,25 +33,27 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={matchData}
-            margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+            margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(150, 150, 150, 0.1)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.6} />
             <XAxis 
               dataKey="month" 
               tick={{ fill: 'var(--foreground)' }}
               axisLine={{ stroke: 'var(--border)' }}
+              tickLine={{ stroke: 'var(--border)' }}
             />
             <YAxis 
               allowDecimals={false} 
               tick={{ fill: 'var(--foreground)' }}
               axisLine={{ stroke: 'var(--border)' }}
+              tickLine={{ stroke: 'var(--border)' }}
             />
             <Tooltip content={<CustomBarTooltip />} />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '10px' }} />
             <Bar 
               name="Match Count" 
               dataKey="matches" 
-              fill="#0088FE" 
+              fill="hsl(var(--chart-1))" 
               radius={[4, 4, 0, 0]}
               animationDuration={1500}
               barSize={30}

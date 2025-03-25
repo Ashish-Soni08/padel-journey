@@ -4,14 +4,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Percent } from "lucide-react";
 
-// Colors for the charts
-const COLORS = ['#0088FE', '#FF8042', '#8B5CF6'];
-
 interface MatchResultsChartProps {
   resultData: { name: string; value: number }[];
 }
 
 const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => {
+  // Custom colors for better visibility
+  const COLORS = [
+    'hsl(var(--chart-1))', 
+    'hsl(var(--chart-2))', 
+    'hsl(var(--chart-3))'
+  ];
+
   // Custom label renderer for pie chart
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
     // If the value is 0, don't render a label
@@ -27,11 +31,12 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
       <text 
         x={x} 
         y={y} 
-        fill={COLORS[index % COLORS.length]}
+        fill="var(--foreground)"
         textAnchor={x > cx ? 'start' : 'end'} 
         dominantBaseline="central"
-        fontSize="12"
-        fontWeight="bold"
+        fontSize="13"
+        fontWeight="600"
+        style={{ filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.15))' }}
       >
         {`${name}: ${(percent * 100).toFixed(0)}%`}
       </text>
@@ -43,7 +48,7 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
     if (active && payload && payload.length) {
       const data = payload[0];
       return (
-        <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
+        <div className="bg-card border border-border p-3 rounded-lg shadow-lg">
           <p className="font-semibold text-sm">{`${data.name}: ${data.value}`}</p>
           <p className="text-xs text-muted-foreground">{`${(data.payload.percent * 100).toFixed(1)}% of total`}</p>
         </div>
@@ -60,10 +65,10 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
   }));
 
   return (
-    <Card className="glass-panel col-span-1 animate-fade-up" style={{ animationDelay: "0.3s" }}>
+    <Card className="glass-panel col-span-1 animate-fade-up shadow-md" style={{ animationDelay: "0.3s" }}>
       <CardHeader>
         <CardTitle className="flex items-center">
-          <Percent className="h-5 w-5 mr-2" />
+          <Percent className="h-5 w-5 mr-2 text-primary" />
           Match Results
         </CardTitle>
       </CardHeader>
@@ -82,9 +87,15 @@ const MatchResultsChart: React.FC<MatchResultsChartProps> = ({ resultData }) => 
               animationDuration={1500}
               label={renderCustomizedLabel}
               labelLine={false}
+              strokeWidth={2}
+              stroke="var(--card)"
             >
               {dataWithPercent.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={COLORS[index % COLORS.length]} 
+                  className="drop-shadow-md hover:opacity-90 transition-opacity"
+                />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
