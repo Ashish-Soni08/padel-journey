@@ -96,22 +96,32 @@ export const useMatchStats = () => {
     ? Math.round((stats.resultCounts.win / (stats.resultCounts.win + stats.resultCounts.loss)) * 100)
     : 0;
 
-  // Format total duration - corrected to handle numeric minutes properly
+  // Format total duration with proper handling of hours and minutes
   const formatDuration = (minutes: number) => {
     if (isNaN(minutes) || minutes <= 0) return "0 mins";
     
     const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+    const mins = Math.round(minutes % 60); // Round to handle any floating point issues
+    
+    let formattedDuration = "";
     
     if (hours > 0) {
-      return `${hours} ${hours === 1 ? 'hr' : 'hrs'}${mins > 0 ? ` ${mins} min${mins === 1 ? '' : 's'}` : ''}`;
+      formattedDuration = `${hours} ${hours === 1 ? 'hr' : 'hrs'}`;
+      if (mins > 0) {
+        formattedDuration += ` ${mins} ${mins === 1 ? 'min' : 'mins'}`;
+      }
     } else {
-      return `${mins} min${mins === 1 ? '' : 's'}`;
+      formattedDuration = `${mins} ${mins === 1 ? 'min' : 'mins'}`;
     }
+    
+    return formattedDuration;
   };
 
   // Get recent matches (top 5)
   const recentMatches = matches.slice(0, 5);
+
+  // Current year for chart display
+  const currentYear = new Date().getFullYear();
 
   return {
     matches,
@@ -120,6 +130,7 @@ export const useMatchStats = () => {
     loading,
     winRate,
     formatDuration,
-    recentMatches
+    recentMatches,
+    currentYear
   };
 };

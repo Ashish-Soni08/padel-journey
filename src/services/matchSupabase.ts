@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { MatchData } from "./matchDatabase";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -120,9 +121,19 @@ export const getMatchStatsFromSupabase = async () => {
   
   // Process each match to calculate result counts and monthly distribution
   matches.forEach(match => {
-    // Count total duration - ensure we're parsing it as a number
-    const duration = parseInt(match.duration, 10);
-    stats.totalDuration += isNaN(duration) ? 0 : duration;
+    // Parse duration correctly, handling different formats
+    let durationMinutes = 0;
+    try {
+      // Check if duration is already a number or a string with a number
+      durationMinutes = parseInt(match.duration, 10);
+      if (isNaN(durationMinutes)) durationMinutes = 0;
+    } catch (e) {
+      console.error('Error parsing duration:', match.duration);
+      durationMinutes = 0;
+    }
+    
+    // Add to total duration
+    stats.totalDuration += durationMinutes;
     
     // Count results
     if (match.result === 'win') stats.resultCounts.win++;

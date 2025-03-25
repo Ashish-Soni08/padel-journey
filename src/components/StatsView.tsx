@@ -16,7 +16,8 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
     loading, 
     winRate, 
     formatDuration, 
-    recentMatches 
+    recentMatches,
+    currentYear
   } = useMatchStats();
 
   if (loading) {
@@ -41,13 +42,13 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
           value={stats.totalMatches.toString()}
-          description={`Since January 2024`}
+          description={`Since January ${currentYear}`}
         />
         <StatCard
           icon={<Clock className="h-6 w-6" />}
           title="Total Duration"
           value={formatDuration(stats.totalDuration)}
-          description={`${stats.totalDuration} minutes played`}
+          description={`Total time played`}
         />
       </div>
 
@@ -57,7 +58,7 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <MonthlyMatchesChart matchData={chartData.matchData} />
+            <MonthlyMatchesChart matchData={chartData.matchData} currentYear={currentYear} />
             <MatchResultsChart resultData={chartData.resultData} />
           </div>
         </CardContent>
