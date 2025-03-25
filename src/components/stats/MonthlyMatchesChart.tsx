@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Activity } from "lucide-react";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 interface MonthlyMatchesChartProps {
   matchData: { month: string; matches: number }[];
@@ -18,6 +18,16 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
     }
   };
 
+  // Ensure all months are displayed in order with 0 for months with no matches
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const completeData = months.map(month => {
+    const existingData = matchData.find(data => data.month === month);
+    return {
+      month,
+      matches: existingData ? existingData.matches : 0
+    };
+  });
+
   return (
     <Card className="glass-panel col-span-1 animate-fade-up shadow-md border-border" style={{ animationDelay: "0.2s" }}>
       <CardHeader>
@@ -29,7 +39,7 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
       <CardContent className="h-[300px] w-full">
         <ChartContainer config={chartConfig} className="h-full">
           <BarChart
-            data={matchData}
+            data={completeData}
             margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.8} />

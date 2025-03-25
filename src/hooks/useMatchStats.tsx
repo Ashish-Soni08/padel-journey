@@ -58,14 +58,15 @@ export const useMatchStats = () => {
         .map((count, index) => ({
           month: MONTHS[index],
           matches: count
-        }));
+        }))
+        .filter(item => item.matches > 0); // Only include months with matches
       
       // Format result data for pie chart
       const resultData = [
         { name: 'Wins', value: stats.resultCounts.win },
         { name: 'Losses', value: stats.resultCounts.loss },
         { name: 'Training', value: stats.resultCounts.training }
-      ];
+      ].filter(item => item.value > 0); // Only include non-zero results
       
       setChartData({
         matchData: monthData,
