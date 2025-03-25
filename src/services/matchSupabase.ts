@@ -129,10 +129,14 @@ export const getMatchStatsFromSupabase = async () => {
     else if (match.result === 'loss') stats.resultCounts.loss++;
     else stats.resultCounts.training++;
     
-    // Count matches by month
+    // Only count matches for the current year
     const matchDate = new Date(match.date);
-    const monthIndex = matchDate.getMonth();
-    stats.monthlyMatches[monthIndex]++;
+    const currentYear = new Date().getFullYear();
+    
+    if (matchDate.getFullYear() === currentYear) {
+      const monthIndex = matchDate.getMonth();
+      stats.monthlyMatches[monthIndex]++;
+    }
   });
   
   return stats;

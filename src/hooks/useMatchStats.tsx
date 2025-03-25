@@ -54,12 +54,10 @@ export const useMatchStats = () => {
     
     const updateChartData = (stats: MatchStats) => {
       // Format monthly data for bar chart
-      const monthData = stats.monthlyMatches
-        .map((count, index) => ({
-          month: MONTHS[index],
-          matches: count
-        }))
-        .filter(item => item.matches > 0); // Only include months with matches
+      const monthData = MONTHS.map((month, index) => ({
+        month: month,
+        matches: stats.monthlyMatches[index]
+      }));
       
       // Format result data for pie chart
       const resultData = [

@@ -18,6 +18,9 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
     }
   };
 
+  // Current year display
+  const currentYear = new Date().getFullYear();
+
   // Ensure all months are displayed in order with 0 for months with no matches
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const completeData = months.map(month => {
@@ -33,7 +36,7 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
       <CardHeader>
         <CardTitle className="flex items-center">
           <Activity className="h-5 w-5 mr-2 text-primary" />
-          Court Time by Month - {new Date().getFullYear()} Season
+          Court Time by Month - {currentYear} Season
         </CardTitle>
       </CardHeader>
       <CardContent className="h-[300px] w-full">
@@ -61,7 +64,7 @@ const MonthlyMatchesChart: React.FC<MonthlyMatchesChartProps> = ({ matchData }) 
                 if (active && payload && payload.length) {
                   return (
                     <div className="bg-card border rounded-md shadow-md p-3 text-sm">
-                      <p className="font-medium">{`${label}: ${payload[0].value} matches`}</p>
+                      <p className="font-medium">{`${label} ${currentYear}: ${payload[0].value} matches`}</p>
                     </div>
                   );
                 }
