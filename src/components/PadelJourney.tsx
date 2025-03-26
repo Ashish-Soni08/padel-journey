@@ -24,10 +24,14 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
         "min-h-screen bg-cover bg-center bg-no-repeat relative", 
         className
       )}
-      style={{ backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')" }}
+      style={{ 
+        backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }}
     >
       {/* Semi-transparent overlay for better readability */}
-      <div className="absolute inset-0 bg-background/85 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]"></div>
       
       {/* Content */}
       <div className="container px-4 py-8 mx-auto max-w-6xl relative">
