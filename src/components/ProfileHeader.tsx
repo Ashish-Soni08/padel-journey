@@ -13,7 +13,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 }) => {
   return (
     <div className={cn("flex flex-col items-center space-y-8 py-10", className)}>
-      <h1 className="text-4xl tracking-tight animate-fade-in font-bold text-center md:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+      <h1 className="text-3xl tracking-tight animate-fade-in font-bold text-center md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80 px-2">
         Ashish's Padel Journey 
       </h1>
       
