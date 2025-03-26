@@ -1,10 +1,10 @@
 
-import MatchForm from "@/components/MatchForm";
+import PadelJourney from "@/components/PadelJourney";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
-      <MatchForm className="mx-auto" />
+    <div className="min-h-screen bg-background">
+      <PadelJourney defaultTab="home" />
     </div>
   );
 };
