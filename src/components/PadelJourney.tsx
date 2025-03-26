@@ -24,7 +24,7 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
         "min-h-screen bg-cover bg-center bg-no-repeat relative", 
         className
       )}
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb')" }}
+      style={{ backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')" }}
     >
       {/* Semi-transparent overlay for better readability */}
       <div className="absolute inset-0 bg-background/85 backdrop-blur-sm"></div>
