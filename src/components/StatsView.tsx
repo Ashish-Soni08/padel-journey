@@ -47,7 +47,7 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
           icon={<Clock className="h-6 w-6" />}
           title="Total Duration"
           value={formatDuration(stats.totalDuration)}
-          description={`Total playing time`}
+          description={`${stats.totalDuration} minutes played`}
         />
       </div>
 
