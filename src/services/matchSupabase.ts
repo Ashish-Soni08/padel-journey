@@ -121,16 +121,17 @@ export const getMatchStatsFromSupabase = async () => {
   
   // Process each match to calculate result counts and monthly distribution
   matches.forEach(match => {
-    // Count total duration - ensure we're parsing it correctly as a number
-    let duration = 0;
+    // Count total duration - ensure we're properly parsing it
     if (match.duration) {
-      // Try to extract a clean number from the duration string
-      const durationNumber = parseInt(match.duration.replace(/\D/g, ''), 10);
-      if (!isNaN(durationNumber)) {
-        duration = durationNumber;
+      // Extract numbers from the duration string (e.g. "30 min" -> 30)
+      const durationMatch = match.duration.match(/\d+/);
+      if (durationMatch) {
+        const minutes = parseInt(durationMatch[0], 10);
+        if (!isNaN(minutes)) {
+          stats.totalDuration += minutes;
+        }
       }
     }
-    stats.totalDuration += duration;
     
     // Count results
     if (match.result === 'win') stats.resultCounts.win++;
@@ -146,9 +147,6 @@ export const getMatchStatsFromSupabase = async () => {
       stats.monthlyMatches[monthIndex]++;
     }
   });
-  
-  // Set specific value for total duration to match the 8 hours (480 minutes)
-  stats.totalDuration = 480;
   
   return stats;
 };
