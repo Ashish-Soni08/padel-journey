@@ -41,7 +41,7 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
           icon={<Calendar className="h-6 w-6" />}
           title="Total Matches"
           value={stats.totalMatches.toString()}
-          description={`Since January ${new Date().getFullYear()}`}
+          description="Since November 2024"
         />
         <StatCard
           icon={<Clock className="h-6 w-6" />}
