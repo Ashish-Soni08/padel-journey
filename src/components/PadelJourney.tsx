@@ -21,16 +21,12 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
   return (
     <div 
       className={cn(
-        "min-h-screen bg-cover bg-center bg-no-repeat relative", 
+        "min-h-screen bg-background", 
         className
       )}
-      style={{ backgroundImage: "url('/padel-background.jpg')" }}
     >
-      {/* Semi-transparent overlay for better readability */}
-      <div className="absolute inset-0 bg-background/85 backdrop-blur-sm"></div>
-      
       {/* Content */}
-      <div className="container px-4 py-8 mx-auto max-w-6xl relative">
+      <div className="container px-4 py-8 mx-auto max-w-6xl">
         <ProfileHeader />
         
         <div className="mt-3 animate-fade-up" style={{ animationDelay: "0.4s" }}>
