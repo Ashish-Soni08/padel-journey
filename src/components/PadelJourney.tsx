@@ -21,10 +21,14 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
   return (
     <div 
       className={cn(
-        "min-h-screen bg-background", 
+        "min-h-screen bg-cover bg-center bg-no-repeat relative", 
         className
       )}
+      style={{ backgroundImage: "url('/padel-background.jpg')" }}
     >
+      {/* Semi-transparent overlay for better readability */}
+      <div className="absolute inset-0 bg-background/85 backdrop-blur-sm"></div>
+      
       {/* Content */}
       <div className="container px-4 py-8 mx-auto max-w-6xl relative">
         <ProfileHeader />
@@ -64,23 +68,8 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
               value="home" 
               className="animate-fade-in tab-transition mt-4"
             >
-              <div 
-                className="rounded-lg p-6 relative overflow-hidden"
-                style={{ 
-                  backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)"
-                }}
-              >
-                {/* Very light overlay for better readability */}
-                <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px] rounded-lg"></div>
-                
-                {/* Match Form */}
-                <div className="relative z-10">
-                  <MatchForm className="bg-white/85 backdrop-blur-md rounded-lg shadow-lg" />
-                </div>
+              <div className="glass-panel rounded-lg p-6">
+                <MatchForm />
               </div>
             </TabsContent>
             
