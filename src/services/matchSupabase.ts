@@ -147,8 +147,8 @@ export const getMatchStatsFromSupabase = async () => {
     }
   });
   
-  // Set specific value for total duration to match the 8 hours (480 minutes)
-  stats.totalDuration = 480;
+  // Ensure we're using actual calculated duration now, not hardcoded
+  console.log('Total calculated duration:', stats.totalDuration);
   
   return stats;
 };
