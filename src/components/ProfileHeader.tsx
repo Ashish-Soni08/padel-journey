@@ -11,25 +11,37 @@ interface ProfileHeaderProps {
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   className
 }) => {
-  return <div className={cn("flex flex-col items-center space-y-6 py-8", className)}>
-      <h1 className="text-4xl tracking-tight animate-fade-in font-bold text-center md:text-7xl">Ashish's Padel Journey </h1>
+  return (
+    <div className={cn("flex flex-col items-center space-y-8 py-10", className)}>
+      <h1 className="text-4xl tracking-tight animate-fade-in font-bold text-center md:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+        Ashish's Padel Journey 
+      </h1>
       
-      <div className="flex flex-col items-center space-y-5 animate-fade-up" style={{
-      animationDelay: "0.2s"
-    }}>
-        <div className="overflow-visible h-32 w-32 md:h-48 md:w-48">
-          <img src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="Ashish" className="profile-image h-32 w-32 md:h-48 md:w-48 rounded-full object-cover border-4 border-white object-[center_25%]" loading="lazy" />
+      <div 
+        className="flex flex-col items-center space-y-6 animate-fade-up" 
+        style={{ animationDelay: "0.2s" }}
+      >
+        <div className="overflow-visible h-32 w-32 md:h-48 md:w-48 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full opacity-70 animate-pulse" style={{ animationDuration: "3s" }}></div>
+          <img 
+            src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" 
+            alt="Ashish" 
+            className="profile-image h-32 w-32 md:h-48 md:w-48 rounded-full object-cover border-4 border-white object-[center_25%] relative z-10" 
+            loading="lazy" 
+          />
         </div>
-        <div className="animate-scale-in" style={{
-        animationDelay: "0.5s"
-      }}>
-          <Flex align="center" gap="2">
-            <Badge size="3" color="indigo">Beginner</Badge>
-            <Badge size="3" color="indigo">Right-handed</Badge>
+        <div 
+          className="animate-scale-in" 
+          style={{ animationDelay: "0.5s" }}
+        >
+          <Flex align="center" gap="3">
+            <Badge size="3" color="indigo" className="px-4 py-1 text-sm">Beginner</Badge>
+            <Badge size="3" color="indigo" className="px-4 py-1 text-sm">Right-handed</Badge>
           </Flex>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default ProfileHeader;

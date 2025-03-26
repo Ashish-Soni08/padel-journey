@@ -58,6 +58,13 @@
 
 .glass-panel {
   @apply bg-white/95 backdrop-blur-sm border border-border shadow-md rounded-lg;
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  box-shadow: 0 15px 35px -15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .card-hover {
@@ -97,6 +104,19 @@
 .page-exit-active {
   opacity: 0;
   transition: opacity 300ms;
+}
+
+/* Button hover effects */
+button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 /* Toast animation */
@@ -154,4 +174,23 @@
 
 .recharts-text {
   fill: var(--foreground) !important;
+}
+
+/* Form improvements */
+input, textarea, select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.15);
+}
+
+/* Improved dropdown styling */
+.radix-select-content {
+  overflow: hidden;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  z-index: 50;
 }
