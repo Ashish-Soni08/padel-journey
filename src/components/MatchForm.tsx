@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { addMatchToSupabase } from "@/services/matchSupabase";
 
 const formSchema = z.object({
@@ -64,6 +66,9 @@ const MatchForm: React.FC<MatchFormProps> = ({
   onMatchAdded
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,11 +82,28 @@ const MatchForm: React.FC<MatchFormProps> = ({
       duration: "",
       venue: "",
       notes: ""
-    }
+    },
+    mode: "onChange" // Enable validations on change for better user feedback
   });
 
   const watchMatchType = form.watch("matchType");
   const watchMatchFormat = form.watch("matchFormat");
+  const formErrors = form.formState.errors;
+
+  // Effect to show toast for validation errors
+  useEffect(() => {
+    if (Object.keys(formErrors).length > 0) {
+      // Find the first error to display
+      const firstErrorField = Object.keys(formErrors)[0];
+      const errorMessage = formErrors[firstErrorField as keyof typeof formErrors]?.message;
+      
+      if (errorMessage) {
+        setFormError(`${firstErrorField}: ${errorMessage}`);
+      }
+    } else {
+      setFormError(null);
+    }
+  }, [formErrors]);
 
   useEffect(() => {
     if (watchMatchType === "training") {
@@ -91,8 +113,23 @@ const MatchForm: React.FC<MatchFormProps> = ({
     }
   }, [watchMatchType, form]);
 
+  // Hide success message after 3 seconds
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showSuccessMessage) {
+      timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [showSuccessMessage]);
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    setFormError(null);
+    
     try {
       // Save match to Supabase
       const newMatch = await addMatchToSupabase({
@@ -124,6 +161,8 @@ const MatchForm: React.FC<MatchFormProps> = ({
         description: `Your ${data.matchType === "training" ? "training session" : data.result} at ${data.venue} has been saved.`
       });
 
+      setShowSuccessMessage(true);
+
       if (onMatchAdded) {
         // Convert to original format for backward compatibility
         const formattedData = {
@@ -147,6 +186,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       });
     } catch (error) {
       console.error("Error saving match:", error);
+      setFormError("Failed to save your match data. Please try again.");
       toast({
         title: "Error",
         description: "Failed to save your match data. Please try again.",
@@ -164,6 +204,25 @@ const MatchForm: React.FC<MatchFormProps> = ({
         <CardTitle className="text-2xl">Match Data</CardTitle>
       </CardHeader>
       <CardContent>
+        {formError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              {formError}
+            </AlertDescription>
+          </Alert>
+        )}
+        
+        {showSuccessMessage && (
+          <Alert className="mb-6 bg-green-50 text-green-800 border-green-200">
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>
+              Match data has been successfully saved!
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -174,7 +233,11 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
-                          <Button variant={"outline"} className={cn("w-full h-10 pl-3 text-left font-normal justify-start", !field.value && "text-muted-foreground")}>
+                          <Button variant={"outline"} className={cn(
+                            "w-full h-10 pl-3 text-left font-normal justify-start", 
+                            !field.value && "text-muted-foreground",
+                            formErrors.date && "border-red-500"
+                          )}>
                             {field.value ? format(field.value, "PPP") : <span>Select match date</span>}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -200,7 +263,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormLabel>Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10">
+                        <SelectTrigger className={cn("h-10", formErrors.matchType && "border-red-500")}>
                           <SelectValue placeholder="Training or Competitive" />
                         </SelectTrigger>
                       </FormControl>
@@ -218,7 +281,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormLabel>Format</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10">
+                        <SelectTrigger className={cn("h-10", formErrors.matchFormat && "border-red-500")}>
                           <SelectValue placeholder="1v1 or 2v2" />
                         </SelectTrigger>
                       </FormControl>
@@ -236,7 +299,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                       <FormLabel>Result</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="h-10">
+                          <SelectTrigger className={cn("h-10", formErrors.result && "border-red-500")}>
                             <SelectValue placeholder="Win, Loss, or Training" />
                           </SelectTrigger>
                         </FormControl>
@@ -257,7 +320,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                         <FormLabel>Player</FormLabel>
                         <FormControl>
                           <Input 
-                            className="h-10" 
+                            className={cn("h-10", formErrors.player1 && "border-red-500")}
                             placeholder={watchMatchFormat === "1v1" ? "e.g. John Smith" : "Player name"} 
                             {...field} 
                           />
@@ -273,7 +336,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                             <FormLabel>Player 2</FormLabel>
                             <FormControl>
                               <Input 
-                                className="h-10" 
+                                className={cn("h-10", formErrors.player2 && "border-red-500")}
                                 placeholder="Player name" 
                                 {...field} 
                               />
@@ -287,7 +350,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                             <FormLabel>Player 3</FormLabel>
                             <FormControl>
                               <Input 
-                                className="h-10" 
+                                className={cn("h-10", formErrors.player3 && "border-red-500")}
                                 placeholder="Player name" 
                                 {...field} 
                               />
@@ -304,7 +367,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                     <FormLabel>Duration</FormLabel>
                     <FormControl>
                       <Input 
-                        className="h-10" 
+                        className={cn("h-10", formErrors.duration && "border-red-500")}
                         placeholder="Duration in minutes (min. 60)" 
                         {...field} 
                       />
@@ -319,7 +382,11 @@ const MatchForm: React.FC<MatchFormProps> = ({
             }}>
                     <FormLabel>Venue</FormLabel>
                     <FormControl>
-                      <Input className="h-10" placeholder="Club name and location e.g. PadelCity Leipzig" {...field} />
+                      <Input 
+                        className={cn("h-10", formErrors.venue && "border-red-500")}
+                        placeholder="Club name and location e.g. PadelCity Leipzig" 
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
@@ -330,12 +397,20 @@ const MatchForm: React.FC<MatchFormProps> = ({
           }) => <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Record thoughts on improvements or areas to work on" className="min-h-[100px]" {...field} />
+                    <Textarea 
+                      placeholder="Record thoughts on improvements or areas to work on" 
+                      className={cn("min-h-[100px]", formErrors.notes && "border-red-500")} 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>} />
             
-            <Button type="submit" className="w-full sm:w-auto transition-all duration-300 ease-in-out hover:shadow-lg" disabled={isSubmitting}>
+            <Button 
+              type="submit" 
+              className="w-full sm:w-auto transition-all duration-300 ease-in-out hover:shadow-lg" 
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Saving..." : "Save Match"}
             </Button>
           </form>
