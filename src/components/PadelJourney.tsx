@@ -69,11 +69,12 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
                 style={{ 
                   backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')",
                   backgroundSize: "cover",
-                  backgroundPosition: "center"
+                  backgroundPosition: "center",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
                 }}
               >
                 {/* Semi-transparent overlay for better readability */}
-                <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px] rounded-lg"></div>
+                <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] rounded-lg"></div>
                 
                 {/* Match Form */}
                 <div className="relative z-10">
