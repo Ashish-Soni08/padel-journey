@@ -19,26 +19,25 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
   const [activeTab, setActiveTab] = useState(defaultTab);
   
   return (
-    <div className={cn("min-h-screen bg-background", className)}>
-      {/* Banner image section - only for the header */}
-      <div 
-        className="relative h-64 bg-cover bg-center bg-no-repeat"
-        style={{ 
-          backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')"
-        }}
-      >
-        {/* Semi-transparent overlay for better readability */}
-        <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px]"></div>
-        
-        {/* Profile header content */}
-        <div className="container px-4 py-4 mx-auto max-w-6xl relative h-full">
-          <ProfileHeader />
-        </div>
-      </div>
+    <div 
+      className={cn(
+        "min-h-screen bg-cover bg-center bg-no-repeat relative", 
+        className
+      )}
+      style={{ 
+        backgroundImage: "url('/lovable-uploads/ca47d752-436c-4bd3-8b60-ae73b6357294.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }}
+    >
+      {/* Semi-transparent overlay for better readability */}
+      <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]"></div>
       
-      {/* Tabs and content section */}
-      <div className="container px-4 py-6 mx-auto max-w-6xl">
-        <div className="animate-fade-up" style={{ animationDelay: "0.4s" }}>
+      {/* Content */}
+      <div className="container px-4 py-8 mx-auto max-w-6xl relative">
+        <ProfileHeader />
+        
+        <div className="mt-3 animate-fade-up" style={{ animationDelay: "0.4s" }}>
           <Tabs 
             defaultValue={defaultTab} 
             className="w-full"
