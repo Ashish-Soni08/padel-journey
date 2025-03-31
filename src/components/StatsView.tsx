@@ -15,8 +15,8 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
     chartData, 
     loading, 
     winRate, 
-    formatDuration, 
-    recentMatches 
+    formatDuration,
+    matches 
   } = useMatchStats();
 
   if (loading) {
@@ -63,7 +63,7 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
         </CardContent>
       </Card>
 
-      <RecentMatchesList matches={recentMatches} />
+      <RecentMatchesList matches={matches} />
     </div>
   );
 };
