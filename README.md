@@ -12,7 +12,7 @@ This application allows Ashish to:
 
 ## Live Demo
 
-**View the app**: [Ashish's Padel Journey](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5)
+**View the app**: [Ashish's Padel Journey](https://padel-journey.lovable.app/)
 
 ## Features
 
@@ -29,44 +29,3 @@ This application allows Ashish to:
 - Recharts for data visualization
 - Tanstack React Query for data management
 - Supabase for backend services and realtime updates
-
-## Getting Started
-
-### Running Locally
-
-```sh
-# Clone the repository
-git clone <YOUR_GIT_URL>
-
-# Navigate to the project directory
-cd <YOUR_PROJECT_NAME>
-
-# Install the necessary dependencies
-npm i
-
-# Start the development server
-npm run dev
-```
-
-### Deployment
-
-The project is deployed and can be accessed at: [https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5)
-
-To deploy your own version:
-1. Open [Lovable](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5)
-2. Click on Share -> Publish
-
-## Custom Domain Setup
-
-For custom domain setup, we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
-
-## Project Structure
-
-- `/components`: UI components including the match form, stats visualizations, and profile header
-- `/hooks`: Custom React hooks for data fetching and state management
-- `/services`: Backend services for database operations and realtime updates
-- `/pages`: Main application pages including home and stats views
-
-## Contributing
-
-Feel free to fork this project and make your own improvements or customizations!
