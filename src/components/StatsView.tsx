@@ -56,11 +56,11 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
         />
       </div>
 
-      <Card className="shadow-md border-border">
-        <CardHeader>
-          <CardTitle>Performance Analytics</CardTitle>
+      <Card className="shadow-md border-border/60 overflow-hidden bg-white/95 backdrop-blur-sm">
+        <CardHeader className="border-b border-border/20 bg-secondary/30">
+          <CardTitle className="text-primary/90">Performance Analytics</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <MonthlyMatchesChart matchData={chartData.matchData} />
             <MatchResultsChart resultData={chartData.resultData} />
