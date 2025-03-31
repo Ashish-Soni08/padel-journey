@@ -15,11 +15,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     <div className={cn("flex flex-col items-center space-y-8 py-10 px-4 relative", className)}>
       {/* Background padel court image */}
       <div className="absolute inset-0 w-full h-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background/50 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background/50 z-10"></div>
         <img 
           src="/lovable-uploads/5c82fb8a-cdb2-4246-b5a1-a872cdf36dab.png" 
           alt="Padel court" 
-          className="w-full h-full object-cover opacity-60 z-0" 
+          className="w-full h-full object-cover opacity-80 z-0" 
         />
       </div>
       
