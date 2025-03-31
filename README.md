@@ -1,69 +1,72 @@
-# Welcome to your Lovable project
 
-## Project info
+# Ashish's Padel Journey
 
-**URL**: https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5
+A web application to track and visualize Ashish's padel tennis journey, including match statistics, performance analytics, and training progress.
 
-## How can I edit this code?
+## Project Overview
 
-There are several ways of editing your application.
+This application allows Ashish to:
+- Track padel matches, results, and training sessions
+- Visualize match statistics and performance trends over time
+- Record and analyze match details including duration, opponents, and outcomes
 
-**Use Lovable**
+## Live Demo
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5) and start prompting.
+**View the app**: [Ashish's Padel Journey](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5)
 
-Changes made via Lovable will be committed automatically to this repo.
+## Features
 
-**Use your preferred IDE**
+- **Match Tracking**: Log match results, training sessions, and match details
+- **Performance Analytics**: Visual charts for monthly matches and win/loss ratios
+- **Statistics Dashboard**: View total matches played, win rate, and total playing time
+- **Responsive Design**: Optimized for both desktop and mobile viewing
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Technologies Used
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- React with TypeScript
+- Tailwind CSS for styling
+- shadcn-ui component library
+- Recharts for data visualization
+- Tanstack React Query for data management
+- Supabase for backend services and realtime updates
 
-Follow these steps:
+## Getting Started
+
+### Running Locally
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
+# Install the necessary dependencies
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The project is deployed and can be accessed at: [https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5)
 
-**Use GitHub Codespaces**
+To deploy your own version:
+1. Open [Lovable](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5)
+2. Click on Share -> Publish
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Custom Domain Setup
 
-## What technologies are used for this project?
+For custom domain setup, we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
 
-This project is built with .
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `/components`: UI components including the match form, stats visualizations, and profile header
+- `/hooks`: Custom React hooks for data fetching and state management
+- `/services`: Backend services for database operations and realtime updates
+- `/pages`: Main application pages including home and stats views
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/bf24e4ac-c4e8-479f-b09a-028ebcaeb0c5) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+Feel free to fork this project and make your own improvements or customizations!
