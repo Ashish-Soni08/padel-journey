@@ -70,6 +70,21 @@ export const addMatchToSupabase = async (match: Omit<MatchData, 'id'>): Promise<
   return convertSupabaseToMatchData(data as SupabaseMatchData);
 };
 
+// Delete a match from Supabase
+export const deleteMatchFromSupabase = async (matchId: string): Promise<boolean> => {
+  const { error } = await supabase
+    .from('matches')
+    .delete()
+    .eq('id', matchId);
+  
+  if (error) {
+    console.error('Error deleting match:', error);
+    return false;
+  }
+  
+  return true;
+};
+
 // Get all matches from Supabase
 export const getAllMatchesFromSupabase = async (): Promise<MatchData[]> => {
   const { data, error } = await supabase

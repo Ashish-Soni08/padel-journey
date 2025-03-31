@@ -2,9 +2,13 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users } from "lucide-react";
+import { Users, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { MatchData } from "@/services/matchDatabase";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { deleteMatchFromSupabase } from "@/services/matchSupabase";
+import { toast } from "@/hooks/use-toast";
 
 interface RecentMatchesListProps {
   matches: MatchData[];
@@ -24,6 +28,24 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
       case 'win': return 'text-emerald-600';
       case 'loss': return 'text-rose-600';
       default: return 'text-blue-600';
+    }
+  };
+
+  // Function to handle match deletion
+  const handleDeleteMatch = async (id: string) => {
+    const success = await deleteMatchFromSupabase(id);
+    
+    if (success) {
+      toast({
+        title: "Match deleted",
+        description: "The match has been successfully deleted",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to delete the match. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -62,6 +84,35 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
                       </div>
                     </div>
                   </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-muted-foreground hover:text-destructive"
+                        aria-label="Delete match"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete match</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this match? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction 
+                          onClick={() => handleDeleteMatch(match.id)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               );
             })
