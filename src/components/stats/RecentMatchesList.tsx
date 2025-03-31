@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, Trash2 } from "lucide-react";
+import { Users, Trash2, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { MatchData } from "@/services/matchDatabase";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,22 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
       case 'loss': return 'text-rose-600';
       default: return 'text-blue-600';
     }
+  };
+
+  // Function to format duration
+  const formatDuration = (duration: string) => {
+    // Try to parse the duration as a number of minutes
+    const minutes = parseInt(duration.replace(/\D/g, ''), 10);
+    if (isNaN(minutes)) return duration;
+    
+    // Format as hours and minutes if > 60 minutes
+    if (minutes >= 60) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}${remainingMinutes > 0 ? `h ${remainingMinutes}min` : 'h'}`;
+    }
+    
+    return `${minutes}min`;
   };
 
   // Function to handle match deletion
@@ -74,10 +90,14 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
                       <AvatarImage src="/lovable-uploads/f91d264e-3813-4ab3-9c96-15b774480dbf.png" alt="User" />
                       <AvatarFallback>AS</AvatarFallback>
                     </Avatar>
-                    <div>
+                    <div className="flex-1">
                       <span className="font-medium text-foreground">You with {formatPartners(partners)}</span>
-                      <div className="text-sm text-muted-foreground">
-                        {format(new Date(match.date), 'yyyy-MM-dd')}
+                      <div className="text-sm text-muted-foreground flex items-center space-x-4">
+                        <span>{format(new Date(match.date), 'yyyy-MM-dd')}</span>
+                        <div className="flex items-center">
+                          <Clock className="h-3 w-3 mr-1 text-muted-foreground" />
+                          <span>{formatDuration(match.duration)}</span>
+                        </div>
                       </div>
                       <div className={`text-sm mt-1 font-medium ${getResultColor(match.result)}`}>
                         {match.result === 'win' ? 'Win' : match.result === 'loss' ? 'Loss' : 'Training'}
