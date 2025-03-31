@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, Trash2, Clock } from "lucide-react";
-import { format } from "date-fns";
+import { format, differenceInDays } from "date-fns";
 import { MatchData } from "@/services/matchDatabase";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -48,6 +48,19 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
     return `${minutes}min`;
   };
 
+  // Function to check if a match can be deleted (is most recent and within 3 days)
+  const canDeleteMatch = (match: MatchData, index: number) => {
+    // Only the most recent match can be deleted (first in the array)
+    if (index !== 0) return false;
+    
+    // Check if the match date is within the last 3 days
+    const matchDate = new Date(match.date);
+    const today = new Date();
+    const daysSinceMatch = differenceInDays(today, matchDate);
+    
+    return daysSinceMatch <= 3;
+  };
+
   // Function to handle match deletion
   const handleDeleteMatch = async (id: string) => {
     const success = await deleteMatchFromSupabase(id);
@@ -79,11 +92,13 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
         <ScrollArea className="h-[400px] pr-4">
           <div className="space-y-4">
             {matches.length > 0 ? (
-              matches.map((match) => {
+              matches.map((match, index) => {
                 const partners = [];
                 if (match.player1) partners.push(match.player1);
                 if (match.player2) partners.push(match.player2);
                 if (match.player3) partners.push(match.player3);
+                
+                const isDeletable = canDeleteMatch(match, index);
                 
                 return (
                   <div key={match.id} className="flex items-center p-3 border rounded-lg bg-card/50 hover:bg-card transition-colors">
@@ -106,35 +121,37 @@ const RecentMatchesList: React.FC<RecentMatchesListProps> = ({ matches }) => {
                         </div>
                       </div>
                     </div>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="text-muted-foreground hover:text-destructive"
-                          aria-label="Delete match"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete match</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete this match? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction 
-                            onClick={() => handleDeleteMatch(match.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    {isDeletable ? (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="text-muted-foreground hover:text-destructive"
+                            aria-label="Delete match"
                           >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete match</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this match? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction 
+                              onClick={() => handleDeleteMatch(match.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    ) : null}
                   </div>
                 );
               })

@@ -28,6 +28,11 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
     );
   }
 
+  // Ensure matches are sorted by date (newest first)
+  const sortedMatches = [...matches].sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
   return (
     <div className={cn("space-y-8 animate-fade-up", className)}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -63,7 +68,7 @@ const StatsView: React.FC<{ className?: string }> = ({ className }) => {
         </CardContent>
       </Card>
 
-      <RecentMatchesList matches={matches} />
+      <RecentMatchesList matches={sortedMatches} />
     </div>
   );
 };
