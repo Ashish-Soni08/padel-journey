@@ -7,7 +7,7 @@ export const enableRealtime = async () => {
     // Apply REPLICA IDENTITY FULL to the matches table
     const { data, error } = await supabase.rpc('enable_realtime_for_table', {
       table_name: 'matches'
-    });
+    } as any); // Use type assertion to bypass the type check temporarily
     
     if (error) {
       console.error('Error enabling realtime for matches table:', error);
