@@ -1,10 +1,11 @@
 
 -- This SQL will be executed when we deploy the function
--- Create function to enable RLS and set REPLICA IDENTITY
+-- Create function to enable RLS and set REPLICA IDENTITY with fixed search path
 CREATE OR REPLACE FUNCTION public.enable_realtime_for_table(table_name text)
 RETURNS boolean
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 BEGIN
   -- Set the replica identity to full for the specified table
@@ -29,6 +30,7 @@ CREATE OR REPLACE FUNCTION public.create_select_policy_for_matches()
 RETURNS boolean
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 BEGIN
   -- Drop policy if it exists
@@ -54,6 +56,7 @@ CREATE OR REPLACE FUNCTION public.create_insert_policy_for_matches()
 RETURNS boolean
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 BEGIN
   -- Drop policy if it exists
