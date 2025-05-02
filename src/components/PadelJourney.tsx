@@ -13,6 +13,8 @@ interface PadelJourneyProps {
   defaultTab?: "home" | "stats";
 }
 
+type TabType = "home" | "stats";
+
 const PadelJourney: React.FC<PadelJourneyProps> = ({ 
   className,
   defaultTab = "home"
@@ -99,7 +101,7 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
           <Tabs 
             defaultValue={defaultTab} 
             className="w-full"
-            onValueChange={(value) => setActiveTab(value as "home" | "stats")}
+            onValueChange={(value) => setActiveTab(value as TabType)}
           >
             <div className="flex justify-center mb-6">
               <TabsList className="grid grid-cols-2 w-full max-w-md shadow-md">
