@@ -1,11 +1,12 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import ProfileHeader from "./ProfileHeader";
 import MatchForm from "./MatchForm";
 import StatsView from "./StatsView";
 import { Home, BarChart2 } from "lucide-react";
+import { setupDatabase } from "@/services/setup";
+import { useMobile } from "@/lib/hooks";
 
 interface PadelJourneyProps {
   className?: string;
@@ -16,8 +17,22 @@ const PadelJourney: React.FC<PadelJourneyProps> = ({
   className,
   defaultTab = "home"
 }) => {
-  const [activeTab, setActiveTab] = useState(defaultTab);
+  const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
+  const isMobile = useMobile();
   
+  // Run database setup on first load
+  useEffect(() => {
+    const runSetup = async () => {
+      try {
+        await setupDatabase();
+      } catch (err) {
+        console.error("Failed to set up database:", err);
+      }
+    };
+    
+    runSetup();
+  }, []);
+
   return (
     <div 
       className={cn(
