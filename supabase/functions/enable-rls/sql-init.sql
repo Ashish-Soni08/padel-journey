@@ -25,6 +25,25 @@ EXCEPTION
 END;
 $$;
 
+-- Create dedicated function to enable RLS specifically for matches table
+CREATE OR REPLACE FUNCTION public.enable_rls_for_matches()
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  -- Enable Row Level Security directly for matches table
+  EXECUTE 'ALTER TABLE public.matches ENABLE ROW LEVEL SECURITY';
+  
+  RETURN true;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Error enabling RLS for matches: %', SQLERRM;
+    RETURN false;
+END;
+$$;
+
 -- Create function to add a select policy for matches table
 CREATE OR REPLACE FUNCTION public.create_select_policy_for_matches()
 RETURNS boolean

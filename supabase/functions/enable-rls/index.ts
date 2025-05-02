@@ -20,15 +20,13 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    // Run SQL to enable RLS for the matches table
-    const { error: rlsError } = await supabaseClient.rpc('enable_realtime_for_table', {
-      table_name: 'matches'
-    });
-
-    if (rlsError) {
-      console.error('Error enabling RLS:', rlsError);
+    // Run SQL query to enable RLS directly (this uses service role which has sufficient permissions)
+    const { error: enableRlsError } = await supabaseClient.rpc('enable_rls_for_matches');
+    
+    if (enableRlsError) {
+      console.error('Error enabling RLS:', enableRlsError);
       return new Response(
-        JSON.stringify({ success: false, error: rlsError.message }),
+        JSON.stringify({ success: false, error: enableRlsError.message }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
       );
     }
