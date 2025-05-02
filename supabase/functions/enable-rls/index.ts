@@ -34,8 +34,7 @@ serve(async (req) => {
     }
 
     // Create policies for the matches table
-    // Since we don't have a user_id column in the matches table, we'll need to create more generic policies
-    // based on the existing schema structure
+    // Since we don't have a user_id column in the matches table, we'll create more generic policies
 
     // Create a select policy - allowing authenticated users to view matches
     const { error: selectPolicyError } = await supabaseClient.rpc('create_select_policy_for_matches');
@@ -49,8 +48,29 @@ serve(async (req) => {
       console.error('Error creating insert policy:', insertPolicyError);
     }
 
+    // Create an update policy - allowing authenticated users to update matches
+    const { error: updatePolicyError } = await supabaseClient.rpc('create_update_policy_for_matches');
+    if (updatePolicyError) {
+      console.error('Error creating update policy:', updatePolicyError);
+    }
+
+    // Create a delete policy - allowing authenticated users to delete matches
+    const { error: deletePolicyError } = await supabaseClient.rpc('create_delete_policy_for_matches');
+    if (deletePolicyError) {
+      console.error('Error creating delete policy:', deletePolicyError);
+    }
+
     return new Response(
-      JSON.stringify({ success: true, message: "RLS enabled and policies created for matches table" }),
+      JSON.stringify({ 
+        success: true, 
+        message: "RLS enabled and policies created for matches table",
+        details: {
+          select_policy: selectPolicyError ? "failed" : "created",
+          insert_policy: insertPolicyError ? "failed" : "created",
+          update_policy: updatePolicyError ? "failed" : "created",
+          delete_policy: deletePolicyError ? "failed" : "created"
+        }
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {

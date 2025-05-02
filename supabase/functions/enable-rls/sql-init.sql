@@ -76,3 +76,55 @@ EXCEPTION
     RETURN false;
 END;
 $$;
+
+-- Create function to add an update policy for matches table
+CREATE OR REPLACE FUNCTION public.create_update_policy_for_matches()
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  -- Drop policy if it exists
+  BEGIN
+    EXECUTE 'DROP POLICY IF EXISTS update_matches ON public.matches';
+  EXCEPTION WHEN OTHERS THEN
+    -- Policy doesn't exist, continue
+  END;
+  
+  -- Create policy for updating matches (authenticated users can update matches)
+  EXECUTE 'CREATE POLICY update_matches ON public.matches FOR UPDATE TO authenticated USING (true)';
+  
+  RETURN true;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Error creating update policy: %', SQLERRM;
+    RETURN false;
+END;
+$$;
+
+-- Create function to add a delete policy for matches table
+CREATE OR REPLACE FUNCTION public.create_delete_policy_for_matches()
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  -- Drop policy if it exists
+  BEGIN
+    EXECUTE 'DROP POLICY IF EXISTS delete_matches ON public.matches';
+  EXCEPTION WHEN OTHERS THEN
+    -- Policy doesn't exist, continue
+  END;
+  
+  -- Create policy for deleting matches (authenticated users can delete matches)
+  EXECUTE 'CREATE POLICY delete_matches ON public.matches FOR DELETE TO authenticated USING (true)';
+  
+  RETURN true;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Error creating delete policy: %', SQLERRM;
+    RETURN false;
+END;
+$$;
