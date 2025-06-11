@@ -37,8 +37,12 @@ export const useMatchStats = () => {
     const loadData = async () => {
       setLoading(true);
       try {
+        console.log('Loading match data...');
         const allMatches = await getAllMatchesFromSupabase();
+        console.log('Loaded matches:', allMatches.length, allMatches);
+        
         const matchStats = await getMatchStatsFromSupabase();
+        console.log('Calculated stats:', matchStats);
         
         setMatches(allMatches);
         setStats(matchStats);
@@ -53,6 +57,8 @@ export const useMatchStats = () => {
     };
     
     const updateChartData = (stats: MatchStats) => {
+      console.log('Updating chart data with stats:', stats);
+      
       // Format monthly data for bar chart
       const monthData = MONTHS.map((month, index) => ({
         month: month,
@@ -66,6 +72,9 @@ export const useMatchStats = () => {
         { name: 'Training', value: stats.resultCounts.training }
       ].filter(item => item.value > 0); // Only include non-zero results
       
+      console.log('Chart data - monthly:', monthData);
+      console.log('Chart data - results:', resultData);
+      
       setChartData({
         matchData: monthData,
         resultData: resultData
@@ -77,8 +86,10 @@ export const useMatchStats = () => {
     
     // Set up real-time subscription
     const channel = subscribeToMatches(async (updatedMatches) => {
+      console.log('Real-time update received:', updatedMatches.length, 'matches');
       setMatches(updatedMatches);
       const updatedStats = await getMatchStatsFromSupabase();
+      console.log('Updated stats from real-time:', updatedStats);
       setStats(updatedStats);
       
       // Update chart data
@@ -112,6 +123,9 @@ export const useMatchStats = () => {
 
   // Get recent matches (top 5)
   const recentMatches = matches.slice(0, 5);
+
+  console.log('Hook returning stats:', stats);
+  console.log('Hook returning matches count:', matches.length);
 
   return {
     matches,

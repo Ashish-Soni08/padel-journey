@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { MatchData } from "./matchDatabase";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -120,7 +119,9 @@ export const subscribeToMatches = (callback: (matches: MatchData[]) => void): Re
 
 // Calculate statistics from match data
 export const getMatchStatsFromSupabase = async () => {
+  console.log('Starting to calculate match stats...');
   const matches = await getAllMatchesFromSupabase();
+  console.log('Raw matches for stats calculation:', matches);
   
   // Initialize statistics object
   const stats = {
@@ -134,36 +135,48 @@ export const getMatchStatsFromSupabase = async () => {
     monthlyMatches: Array(12).fill(0) as number[]
   };
   
+  console.log('Initial stats object:', stats);
+  
   // Process each match to calculate result counts and monthly distribution
-  matches.forEach(match => {
+  matches.forEach((match, index) => {
+    console.log(`Processing match ${index + 1}:`, match);
+    
     // Count total duration - ensure we're parsing it correctly as a number
     let duration = 0;
     if (match.duration) {
+      console.log('Original duration:', match.duration);
       // Try to extract a clean number from the duration string
       const durationNumber = parseInt(match.duration.replace(/\D/g, ''), 10);
+      console.log('Parsed duration number:', durationNumber);
       if (!isNaN(durationNumber)) {
         duration = durationNumber;
       }
     }
     stats.totalDuration += duration;
+    console.log('Running total duration:', stats.totalDuration);
     
     // Count results
+    console.log('Match result:', match.result);
     if (match.result === 'win') stats.resultCounts.win++;
     else if (match.result === 'loss') stats.resultCounts.loss++;
     else stats.resultCounts.training++;
+    
+    console.log('Running result counts:', stats.resultCounts);
     
     // Only count matches for the current year
     const matchDate = new Date(match.date);
     const currentYear = new Date().getFullYear();
     
+    console.log('Match date:', matchDate, 'Current year:', currentYear, 'Match year:', matchDate.getFullYear());
+    
     if (matchDate.getFullYear() === currentYear) {
       const monthIndex = matchDate.getMonth();
+      console.log('Adding to month index:', monthIndex);
       stats.monthlyMatches[monthIndex]++;
     }
   });
   
-  // Ensure we're using actual calculated duration now, not hardcoded
-  console.log('Total calculated duration:', stats.totalDuration);
+  console.log('Final calculated stats:', stats);
   
   return stats;
 };
